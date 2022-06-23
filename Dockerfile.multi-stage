@@ -1,0 +1,51 @@
+# development --------------------------
+FROM golang:1.16.14 as development
+
+WORKDIR /app
+
+RUN go get github.com/githubnemo/CompileDaemon
+RUN go get gotest.tools/gotestsum
+
+EXPOSE 9999
+ENTRYPOINT CompileDaemon --build="go build main.go" --command=./main
+
+
+# testing --------------------------
+FROM development as testing
+
+COPY ./go.mod .
+COPY ./go.sum .
+RUN go mod download
+
+COPY . .
+RUN echo "$(git describe --abbrev=0 --tags)" > /app/version
+
+RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo -ldflags '-w -s' -o /app/migrations.external /app/migrations/external
+RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo -ldflags '-w -s' -o /app/migrations.internal /app/migrations/internal
+RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo -ldflags '-w -s' -o /app/main
+
+EXPOSE 9999
+CMD ["/app/main"]
+
+
+# Production --------------------------
+FROM alpine:3.12 as production
+
+ENV PATH /app:$PATH
+WORKDIR /app
+
+RUN apk add --update curl \
+    && rm -rf /var/cache/apk/*
+
+ARG VERSION
+ENV VERSION=${VERSION}
+
+COPY --from=testing /app/migrations.external /app/migrations.external
+COPY --from=testing /app/migrations.internal /app/migrations.internal
+COPY --from=testing /app/src/libs/i18n/*.json /app/src/libs/i18n/
+COPY --from=testing /app/main /app/main
+RUN echo $VERSION > /app/version
+
+EXPOSE 9999
+
+CMD ["main"]

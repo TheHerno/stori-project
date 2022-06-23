@@ -1,0 +1,33 @@
+{
+    "WAREHOUSE": {
+        "CREATED": "Warehouse creada",
+        "FOUND": "Warehouse encontrada",
+        "UPDATED": "Warehouse actualizada",
+        "DELETED": "Warehouse eliminada"
+    },
+    "PRODUCT": {
+        "CREATED": "Producto creado",
+        "FOUND": "Producto encontrado",
+        "UPDATED": "Producto actualizado",
+        "DELETED": "Producto eliminado"
+    },
+    "STOCKMOVEMENT": {
+        "CREATED": "Movimiento de stock creado"
+    },
+    "ERRORS": {
+        "NOT_FOUND": "Entidad no encontrada",
+        "INTERNAL_SERVER": "Error interno del servidor",
+        "URL_NOT_FOUND": "URL no encontrada",
+        "PAGE_SIZE_TOO_LARGE": "Valor muy alto para tamaño de página",
+        "PAGE_TOO_LARGE": "Valor muy alto para página",
+        "GET_USER": "No se puede obtener los datos del usuario",
+        "ID_NOT_NUMERIC": "El campo ID no es numérico",
+        "FIELD_VALIDATION": "El campo {{.Field}} no satisface la validación {{.Validation}} {{.Valid}}",
+        "USER_ID_DUPLICATED": "El ID del usuario ya existe",
+        "PRODUCT_NOT_ENABLED": "Ese producto no está habilitado",
+        "STOCK_MOVEMENT_INVALID": "Movimiento de stock no válido",
+        "CANT_DELETE_WAREHOUSE": "No puede borrar una warehouse con movimientos existentes",
+        "CANT_DELETE_PRODUCT": "No puede borrar un producto con movimientos existentes",
+        "CONNECTION_PROVIDER": "Servicio no disponible, reintente en unos minutos"
+    }
+}

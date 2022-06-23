@@ -1,0 +1,33 @@
+{
+    "WAREHOUSE": {
+        "CREATED": "Warehouse created",
+        "FOUND": "Warehouse found",
+        "UPDATED": "Warehouse updated",
+        "DELETED": "Warehouse deleted"
+    },
+    "PRODUCT": {
+        "CREATED": "Product created",
+        "FOUND": "Product found",
+        "UPDATED": "Product updated",
+        "DELETED": "Product deleted"
+    },
+    "STOCKMOVEMENT": {
+        "CREATED": "Stock movement created"
+    },
+    "ERRORS": {
+        "NOT_FOUND": "Entity not found",
+        "INTERNAL_SERVER": "Internal server error",
+        "URL_NOT_FOUND": "URL not found",
+        "PAGE_SIZE_TOO_LARGE": "Page size value too large",
+        "PAGE_TOO_LARGE": "Page value too large",
+        "ID_NOT_NUMERIC": "ID field is not numeric",
+        "GET_USER": "Cannot get user data",
+        "FIELD_VALIDATION": "The {{.Field}} field does not satisfy the validation {{.Validation}} {{.Valid}}",
+        "USER_ID_DUPLICATED": "User ID already exists",
+        "PRODUCT_NOT_ENABLED": "That product is not enabled",
+        "STOCK_MOVEMENT_INVALID": "Stock movement is invalid",
+        "CANT_DELETE_WAREHOUSE": "Cannot delete a warehouse with existent movements",
+        "CANT_DELETE_PRODUCT": "Cannot delete product with existent movements",
+        "CONNECTION_PROVIDER": "Service not available, retry in a few minutes"
+    }
+}

@@ -1,0 +1,43 @@
+version: '3.4'
+services:
+    app:
+        container_name: 'stori-service'
+        image: 'stori-service'
+        build:
+            context: .
+            dockerfile: Dockerfile.multi-stage
+            target: testing
+        environment:
+            APP_ENV: 'testing'
+            ENVIRONMENT_NAME: ${ENVIRONMENT_NAME}
+            EVENT_LOGGER_PASSWORD: ${EVENT_LOGGER_PASSWORD}
+            EVENT_LOGGER_URL: ${EVENT_LOGGER_URL}
+            EVENT_LOGGER_USER: ${EVENT_LOGGER_USER}
+            STORI_SERVICE_POSTGRESQL_HOST: stori-service-postgres
+            STORI_SERVICE_POSTGRESQL_NAME: db
+            STORI_SERVICE_POSTGRESQL_NAME_TEST: db_test
+            STORI_SERVICE_POSTGRESQL_PASSWORD: ${STORI_SERVICE_POSTGRESQL_PASSWORD}
+            STORI_SERVICE_POSTGRESQL_PORT: 5432
+            STORI_SERVICE_POSTGRESQL_SSLMODE: disable
+            STORI_SERVICE_POSTGRESQL_USERNAME: user
+            STORI_SERVICE_REST_PORT: 9009
+            SECONDS_BETWEEN_ATTEMPTS: 10
+            SERVICE_NAME: stori-service
+            WHITE_LIST: 'http://localhost:9000'
+        ports:
+            - '9009:9009'
+        depends_on:
+            - database
+    database:
+        container_name: 'stori-service-postgres'
+        image: 'postgres:12.3'
+        environment:
+            POSTGRES_DB: db_test
+            POSTGRES_PASSWORD: ${STORI_SERVICE_POSTGRESQL_PASSWORD}
+            POSTGRES_USER: user
+        ports:
+            - '7090:5432'
+networks:
+    default:
+        external:
+            name: herno-net
