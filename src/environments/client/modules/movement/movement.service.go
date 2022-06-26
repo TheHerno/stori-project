@@ -27,8 +27,8 @@ func NewMovementService(rMovement interfaces.IMovementRepository, rUser interfac
 /*
 getAvailableStock finds the last stock movement and returns the available stock
 */
-func (s *MovementService) getAvailableStock(userID int, productID int) (int, error) {
-	lastMovement, err := s.rMovement.FindLastMovement(userID, productID)
+func (s *MovementService) getAvailableStock(userID int) (int, error) {
+	lastMovement, err := s.rMovement.FindLastMovement(userID)
 	if goerrors.Is(err, errors.ErrNotFound) {
 		return 0, nil
 	} else if err != nil {
@@ -41,7 +41,7 @@ func (s *MovementService) getAvailableStock(userID int, productID int) (int, err
 save calculates the new available, validates it,  and saves the new stock movement
 */
 func (s *MovementService) save(rMovement interfaces.IMovementRepository, newMovement *dto.NewMovement, user *entity.User) (*entity.Movement, error) {
-	lastAvailable, err := s.getAvailableStock(user.UserID, newMovement.ProductID)
+	lastAvailable, err := s.getAvailableStock(user.UserID)
 	if err != nil {
 		return nil, err
 	}
