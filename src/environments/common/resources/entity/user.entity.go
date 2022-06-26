@@ -11,8 +11,9 @@ import (
 	User model for User table
 */
 type User struct {
-	UserID    int            `json:"user_id" gorm:"primaryKey" groups:"admin"`
-	Name      string         `json:"name" validate:"required,min=3,max=300" groups:"admin"`
+	UserID    int            `json:"user_id" gorm:"primaryKey" groups:"client"`
+	Name      string         `json:"name" validate:"required,min=3,max=100" groups:"client"`
+	Email     string         `json:"email" validate:"required,email,max=100" groups:"client"`
 	CreatedAt time.Time      `json:"created_at" groups:""`
 	UpdatedAt time.Time      `json:"updated_at" groups:""`
 	DeletedAt gorm.DeletedAt `json:"deleted_at" groups:""`

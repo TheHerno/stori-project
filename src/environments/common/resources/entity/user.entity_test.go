@@ -10,12 +10,14 @@ import (
 func TestUser(t *testing.T) {
 	validId := 5
 	validName := "Pepe pepito"
+	validEmail := "pepepe@hotmail.com"
 	shortString := "El"
 	longString := strings.Repeat("E", 301)
 	t.Run("Should success on", func(t *testing.T) {
 		w := User{
 			UserID: 1,
 			Name:   validName,
+			Email:  validEmail,
 		}
 		err := w.Validate()
 		assert.NoError(t, err)
@@ -25,22 +27,26 @@ func TestUser(t *testing.T) {
 		testCases := map[string]*User{
 			"Without name": {
 				UserID: validId,
-			},
-			"Without adress": {
-				UserID: validId,
-				Name:   validName,
-			},
-			"Short adress": {
-				UserID: validId,
-				Name:   validName,
+				Email:  validEmail,
 			},
 			"Short name": {
 				UserID: validId,
 				Name:   shortString,
+				Email:  validEmail,
 			},
 			"Long name": {
 				UserID: validId,
 				Name:   longString,
+				Email:  validEmail,
+			},
+			"Without email": {
+				UserID: validId,
+				Name:   validName,
+			},
+			"Invalid email": {
+				UserID: validId,
+				Name:   validName,
+				Email:  "invalid email",
 			},
 		}
 
