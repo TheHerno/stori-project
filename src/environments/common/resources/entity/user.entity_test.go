@@ -7,46 +7,46 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestUser(t *testing.T) {
+func TestCustomer(t *testing.T) {
 	validId := 5
 	validName := "Pepe pepito"
 	validEmail := "pepepe@hotmail.com"
 	shortString := "El"
 	longString := strings.Repeat("E", 301)
 	t.Run("Should success on", func(t *testing.T) {
-		w := User{
-			UserID: 1,
-			Name:   validName,
-			Email:  validEmail,
+		w := Customer{
+			Customerid: 1,
+			Name:       validName,
+			Email:      validEmail,
 		}
 		err := w.Validate()
 		assert.NoError(t, err)
 	})
 
 	t.Run("Should fail on", func(t *testing.T) {
-		testCases := map[string]*User{
+		testCases := map[string]*Customer{
 			"Without name": {
-				UserID: validId,
-				Email:  validEmail,
+				Customerid: validId,
+				Email:      validEmail,
 			},
 			"Short name": {
-				UserID: validId,
-				Name:   shortString,
-				Email:  validEmail,
+				Customerid: validId,
+				Name:       shortString,
+				Email:      validEmail,
 			},
 			"Long name": {
-				UserID: validId,
-				Name:   longString,
-				Email:  validEmail,
+				Customerid: validId,
+				Name:       longString,
+				Email:      validEmail,
 			},
 			"Without email": {
-				UserID: validId,
-				Name:   validName,
+				Customerid: validId,
+				Name:       validName,
 			},
 			"Invalid email": {
-				UserID: validId,
-				Name:   validName,
-				Email:  "invalid email",
+				Customerid: validId,
+				Name:       validName,
+				Email:      "invalid email",
 			},
 		}
 

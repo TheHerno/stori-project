@@ -1,9 +1,9 @@
 {
-    "USER": {
-        "CREATED": "User creada",
-        "FOUND": "User encontrada",
-        "UPDATED": "User actualizada",
-        "DELETED": "User eliminada"
+    "CUSTOMER": {
+        "CREATED": "Customer creada",
+        "FOUND": "Customer encontrada",
+        "UPDATED": "Customer actualizada",
+        "DELETED": "Customer eliminada"
     },
     "PRODUCT": {
         "CREATED": "Producto creado",
@@ -20,13 +20,13 @@
         "URL_NOT_FOUND": "URL no encontrada",
         "PAGE_SIZE_TOO_LARGE": "Valor muy alto para tamaño de página",
         "PAGE_TOO_LARGE": "Valor muy alto para página",
-        "GET_USER": "No se puede obtener los datos del usuario",
+        "GET_CUSTOMER": "No se puede obtener los datos del usuario",
         "ID_NOT_NUMERIC": "El campo ID no es numérico",
         "FIELD_VALIDATION": "El campo {{.Field}} no satisface la validación {{.Validation}} {{.Valid}}",
-        "USER_ID_DUPLICATED": "El ID del usuario ya existe",
+        "CUSTOMER_ID_DUPLICATED": "El ID del usuario ya existe",
         "PRODUCT_NOT_ENABLED": "Ese producto no está habilitado",
         "MOVEMENT_INVALID": "Movimiento de stock no válido",
-        "CANT_DELETE_USER": "No puede borrar una user con movimientos existentes",
+        "CANT_DELETE_CUSTOMER": "No puede borrar una customer con movimientos existentes",
         "CANT_DELETE_PRODUCT": "No puede borrar un producto con movimientos existentes",
         "CONNECTION_PROVIDER": "Servicio no disponible, reintente en unos minutos"
     }

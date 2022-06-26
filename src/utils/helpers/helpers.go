@@ -23,8 +23,8 @@ func Middleware(handler http.Handler, middlewares ...func(http.Handler) http.Han
 IDFromRequestToInt returns the ID from the request as an int.
 */
 func IDFromRequestToInt(request *http.Request) (int, error) {
-	userId, err := strconv.Atoi(mux.Vars(request)["id"])
-	return userId, err
+	customerid, err := strconv.Atoi(mux.Vars(request)["id"])
+	return customerid, err
 }
 
 //PointerToString is a helper to create (inline) pointers to string value, returns nil if string is empty

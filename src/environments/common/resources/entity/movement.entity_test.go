@@ -9,7 +9,7 @@ import (
 func TestMovement(t *testing.T) {
 	// fixture
 	validMovementID := 1
-	validUserID := 1
+	validCustomerid := 1
 	validQty := 10
 	validAvailable := 20
 	validType := 1
@@ -17,7 +17,7 @@ func TestMovement(t *testing.T) {
 		// fixture
 		movement := &Movement{
 			MovementID: validMovementID,
-			UserID:     validUserID,
+			Customerid: validCustomerid,
 			Quantity:   validQty,
 			Available:  validAvailable,
 			Type:       validType,
@@ -34,7 +34,7 @@ func TestMovement(t *testing.T) {
 			input *Movement
 		}{
 			{
-				name: "Without UserID",
+				name: "Without Customerid",
 				input: &Movement{
 					MovementID: validMovementID,
 					Quantity:   validQty,
@@ -43,10 +43,10 @@ func TestMovement(t *testing.T) {
 				},
 			},
 			{
-				name: "Invalid UserID",
+				name: "Invalid Customerid",
 				input: &Movement{
 					MovementID: validMovementID,
-					UserID:     0,
+					Customerid: 0,
 					Quantity:   validQty,
 					Available:  validAvailable,
 					Type:       validType,
@@ -56,7 +56,7 @@ func TestMovement(t *testing.T) {
 				name: "Without Quantity",
 				input: &Movement{
 					MovementID: validMovementID,
-					UserID:     validUserID,
+					Customerid: validCustomerid,
 					Available:  validAvailable,
 					Type:       validType,
 				},
@@ -65,7 +65,7 @@ func TestMovement(t *testing.T) {
 				name: "Invalid Quantity",
 				input: &Movement{
 					MovementID: validMovementID,
-					UserID:     validUserID,
+					Customerid: validCustomerid,
 					Quantity:   0,
 					Available:  validAvailable,
 					Type:       validType,
@@ -75,7 +75,7 @@ func TestMovement(t *testing.T) {
 				name: "Without Available",
 				input: &Movement{
 					MovementID: validMovementID,
-					UserID:     validUserID,
+					Customerid: validCustomerid,
 					Quantity:   validQty,
 					Type:       validType,
 				},
@@ -85,7 +85,7 @@ func TestMovement(t *testing.T) {
 				name: "Invalid Available",
 				input: &Movement{
 					MovementID: validMovementID,
-					UserID:     validUserID,
+					Customerid: validCustomerid,
 					Quantity:   validQty,
 					Available:  -1,
 					Type:       validType,
@@ -95,7 +95,7 @@ func TestMovement(t *testing.T) {
 				name: "Without Type",
 				input: &Movement{
 					MovementID: validMovementID,
-					UserID:     validUserID,
+					Customerid: validCustomerid,
 					Quantity:   validQty,
 					Available:  validAvailable,
 				},
@@ -104,7 +104,7 @@ func TestMovement(t *testing.T) {
 				name: "Invalid Type",
 				input: &Movement{
 					MovementID: validMovementID,
-					UserID:     validUserID,
+					Customerid: validCustomerid,
 					Quantity:   validQty,
 					Available:  validAvailable,
 					Type:       0,

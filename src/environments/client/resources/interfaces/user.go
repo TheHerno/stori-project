@@ -6,10 +6,10 @@ import (
 )
 
 /*
-	IUserRepository to interact with entity and database
+	ICustomerRepository to interact with entity and database
 */
-type IUserRepository interface {
+type ICustomerRepository interface {
 	interfaces.ITransactionalRepository
-	FindAndLockByUserID(id int) (*entity.User, error)
-	FindByUserID(id int) (*entity.User, error)
+	FindAndLockByCustomerid(id int) (*entity.Customer, error)
+	FindByCustomerid(id int) (*entity.Customer, error)
 }

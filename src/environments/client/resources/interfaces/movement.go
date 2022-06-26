@@ -12,7 +12,7 @@ IMovementRepository to interact with entity and database
 type IMovementRepository interface {
 	commonInterfaces.ITransactionalRepository
 	Create(movement *entity.Movement) (*entity.Movement, error)
-	FindLastMovement(userID int) (*entity.Movement, error)
+	FindLastMovement(customerid int) (*entity.Movement, error)
 }
 
 /*

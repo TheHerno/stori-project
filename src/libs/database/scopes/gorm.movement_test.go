@@ -20,26 +20,26 @@ func TestMain(m *testing.M) {
 
 func TestMovementScope(t *testing.T) {
 	db := database.GetStoriGormConnection().Session(&gorm.Session{DryRun: true})
-	t.Run("MovementByUserID", func(t *testing.T) {
-		subQuery := db.Scopes(MovementByUserID(1)).Find(nil).Statement
+	t.Run("MovementByCustomerid", func(t *testing.T) {
+		subQuery := db.Scopes(MovementByCustomerid(1)).Find(nil).Statement
 
 		//Data Assertion: query
 		assert.Contains(t, subQuery.SQL.String(), `SELECT * FROM "movement"`)
-		assert.Contains(t, subQuery.SQL.String(), "\"user_id\" = $1")
+		assert.Contains(t, subQuery.SQL.String(), "\"customer_id\" = $1")
 
 		//Data Assertion: inteporlated values
 		assert.Equal(t, 1, subQuery.Vars[0])
 	})
-	t.Run("StocksByUserID", func(t *testing.T) {
+	t.Run("StocksByCustomerid", func(t *testing.T) {
 		pagination := dto.NewPagination(2, 20, 0)
-		subQuery := db.Scopes(StocksByUserID(1, pagination)).Find(nil).Statement
+		subQuery := db.Scopes(StocksByCustomerid(1, pagination)).Find(nil).Statement
 
 		//Data Assertion: query
 		assert.Contains(t, subQuery.SQL.String(), `SELECT DISTINCT ON (movement.product_id)`)
 		assert.Contains(t, subQuery.SQL.String(), `product.product_id, movement.available as stock, product.name, product.slug, product.description`)
 		assert.Contains(t, subQuery.SQL.String(), `JOIN product ON product.product_id = movement.product_id`)
 		assert.Contains(t, subQuery.SQL.String(), `ORDER BY movement.product_id ASC, movement_id DESC`)
-		assert.Contains(t, subQuery.SQL.String(), "\"user_id\" = $1")
+		assert.Contains(t, subQuery.SQL.String(), "\"customer_id\" = $1")
 		assert.Contains(t, subQuery.SQL.String(), "enabled = true")
 		assert.Contains(t, subQuery.SQL.String(), "LIMIT "+strconv.Itoa(pagination.PageSize))
 		assert.Contains(t, subQuery.SQL.String(), "OFFSET "+strconv.Itoa(pagination.Offset()))

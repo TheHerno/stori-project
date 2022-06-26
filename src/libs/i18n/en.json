@@ -1,9 +1,9 @@
 {
-    "USER": {
-        "CREATED": "User created",
-        "FOUND": "User found",
-        "UPDATED": "User updated",
-        "DELETED": "User deleted"
+    "CUSTOMER": {
+        "CREATED": "Customer created",
+        "FOUND": "Customer found",
+        "UPDATED": "Customer updated",
+        "DELETED": "Customer deleted"
     },
     "PRODUCT": {
         "CREATED": "Product created",
@@ -21,12 +21,12 @@
         "PAGE_SIZE_TOO_LARGE": "Page size value too large",
         "PAGE_TOO_LARGE": "Page value too large",
         "ID_NOT_NUMERIC": "ID field is not numeric",
-        "GET_USER": "Cannot get user data",
+        "GET_CUSTOMER": "Cannot get customer data",
         "FIELD_VALIDATION": "The {{.Field}} field does not satisfy the validation {{.Validation}} {{.Valid}}",
-        "USER_ID_DUPLICATED": "User ID already exists",
+        "CUSTOMER_ID_DUPLICATED": "Customer ID already exists",
         "PRODUCT_NOT_ENABLED": "That product is not enabled",
         "MOVEMENT_INVALID": "Stock movement is invalid",
-        "CANT_DELETE_USER": "Cannot delete a user with existent movements",
+        "CANT_DELETE_CUSTOMER": "Cannot delete a customer with existent movements",
         "CANT_DELETE_PRODUCT": "Cannot delete product with existent movements",
         "CONNECTION_PROVIDER": "Service not available, retry in a few minutes"
     }

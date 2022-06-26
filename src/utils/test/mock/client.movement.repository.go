@@ -22,8 +22,8 @@ func (mock *ClientMovementRepository) Create(movement *entity.Movement) (*entity
 }
 
 // FindLastMovement mock method
-func (mock *ClientMovementRepository) FindLastMovement(userID int, productID int) (*entity.Movement, error) {
-	args := mock.Called(userID, productID)
+func (mock *ClientMovementRepository) FindLastMovement(customerid int, productID int) (*entity.Movement, error) {
+	args := mock.Called(customerid, productID)
 	result := args.Get(0)
 	if result != nil {
 		return result.(*entity.Movement), args.Error(1)

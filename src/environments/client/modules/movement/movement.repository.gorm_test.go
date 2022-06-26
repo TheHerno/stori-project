@@ -18,78 +18,78 @@ var (
 	falseValue = false
 )
 */
-var users = []entity.User{
+var users = []entity.Customer{
 	{
-		UserID: 1,
-		Name:   "User 1",
+		Customerid: 1,
+		Name:       "User 1",
 	},
 	{
-		UserID: 2,
-		Name:   "User 2",
+		Customerid: 2,
+		Name:       "User 2",
 	},
 	{
-		UserID: 3,
-		Name:   "User 3",
+		Customerid: 3,
+		Name:       "User 3",
 	},
 	{
-		UserID: 4,
-		Name:   "User 4",
+		Customerid: 4,
+		Name:       "User 4",
 	},
 }
 
 var movements = []entity.Movement{
 	{
 		MovementID: 1,
-		UserID:     1,
+		Customerid: 1,
 		Quantity:   10,
 		Available:  10,
 		Type:       constant.IncomeType,
 	},
 	{
 		MovementID: 2,
-		UserID:     1,
+		Customerid: 1,
 		Quantity:   5,
 		Available:  5,
 		Type:       constant.OutcomeType,
 	},
 	{
 		MovementID: 3,
-		UserID:     1,
+		Customerid: 1,
 		Quantity:   10,
 		Available:  15,
 		Type:       constant.IncomeType,
 	},
 	{
 		MovementID: 4,
-		UserID:     4,
+		Customerid: 4,
 		Quantity:   17,
 		Available:  17,
 		Type:       constant.IncomeType,
 	},
 	{
 		MovementID: 5,
-		UserID:     1,
+		Customerid: 1,
 		Quantity:   20,
 		Available:  20,
 		Type:       constant.IncomeType,
 	},
 	{
 		MovementID: 6,
-		UserID:     1,
+		Customerid: 1,
 		Quantity:   100,
 		Available:  100,
 		Type:       constant.IncomeType,
 	},
 	{
 		MovementID: 7,
-		UserID:     1,
+		Customerid: 1,
 		Quantity:   75,
 		Available:  25,
 		Type:       constant.OutcomeType,
 	},
 	{
 		MovementID: 8,
-		UserID:     1,
+		Customerid: 1,
 		Quantity:   12,
 		Available:  12,
 		Type:       constant.IncomeType,
@@ -150,7 +150,7 @@ func TestGormRepository(t *testing.T) {
 				// Fixture
 				invalidMovementToCreate := &entity.Movement{}
 				copier.Copy(invalidMovementToCreate, &movements[0])
-				invalidMovementToCreate.UserID = 0
+				invalidMovementToCreate.Customerid = 0
 				invalidMovementToCreate.Quantity = 0
 				invalidMovementToCreate.Available = -1
 				invalidMovementToCreate.Type = 0
@@ -191,7 +191,7 @@ func TestGormRepository(t *testing.T) {
 	})
 	t.Run("FindStocksByUser", func(t *testing.T) {
 		// fixture
-		userIDToFind := users[0].UserID
+		customeridToFind := users[0].Customerid
 		t.Run("Should success on", func(t *testing.T) {
 			// fixture
 			productsWithStockToFind := []dto.ProductWithStock{
@@ -264,7 +264,7 @@ func TestGormRepository(t *testing.T) {
 
 			for _, tC := range testCases {
 				t.Run(tC.TestName, func(t *testing.T) {
-					got, err := rMovement.FindStocksByUser(userIDToFind, tC.Pagination)
+					got, err := rMovement.FindStocksByUser(customeridToFind, tC.Pagination)
 
 					// assertions
 					assert.NoError(t, err)

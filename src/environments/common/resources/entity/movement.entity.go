@@ -12,7 +12,7 @@ Movement model for movement table
 */
 type Movement struct {
 	MovementID int            `json:"movement_id" gorm:"primaryKey" groups:"client"`
-	UserID     int            `json:"user_id" groups:"client" validate:"required,gte=1"`
+	Customerid int            `json:"customer_id" groups:"client" validate:"required,gte=1"`
 	Quantity   int            `json:"quantity" groups:"client" validate:"required,gt=0"`
 	Available  int            `json:"available" groups:"client" validate:"required,gte=0"`
 	Type       int            `json:"type" groups:"client" validate:"required,eq=1|eq=-1"`

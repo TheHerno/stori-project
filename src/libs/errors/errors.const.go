@@ -15,8 +15,8 @@ var (
 	//ErrIDNotNumeric indicates a numeric ID wasn't send as numeric
 	ErrIDNotNumeric = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.ID_NOT_NUMERIC"})
 
-	//ErrUserIDDuplicated indicates the UserID is duplicated
-	ErrUserIDDuplicated = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.USER_ID_DUPLICATED"})
+	//ErrCustomeridDuplicated indicates the Customerid is duplicated
+	ErrCustomeridDuplicated = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.CUSTOMER_ID_DUPLICATED"})
 
 	//ErrProductNotEnabled indicate the Product is not enabled
 	ErrProductNotEnabled = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.PRODUCT_NOT_ENABLED"})

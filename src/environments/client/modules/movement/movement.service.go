@@ -13,22 +13,22 @@ Struct that implements IMovementService
 */
 type MovementService struct {
 	rMovement interfaces.IMovementRepository
-	rUser     interfaces.IUserRepository
+	rCustomer interfaces.ICustomerRepository
 }
 
 /*
 	NewMovementService creates a new service, receives repository by dependency injection
 	and returns IRepositoryService, so it needs to implement all its methods
 */
-func NewMovementService(rMovement interfaces.IMovementRepository, rUser interfaces.IUserRepository) interfaces.IMovementService {
-	return &MovementService{rMovement, rUser}
+func NewMovementService(rMovement interfaces.IMovementRepository, rCustomer interfaces.ICustomerRepository) interfaces.IMovementService {
+	return &MovementService{rMovement, rCustomer}
 }
 
 /*
 getAvailableStock finds the last stock movement and returns the available stock
 */
-func (s *MovementService) getAvailableStock(userID int) (int, error) {
-	lastMovement, err := s.rMovement.FindLastMovement(userID)
+func (s *MovementService) getAvailableStock(customerid int) (int, error) {
+	lastMovement, err := s.rMovement.FindLastMovement(customerid)
 	if goerrors.Is(err, errors.ErrNotFound) {
 		return 0, nil
 	} else if err != nil {
@@ -40,8 +40,8 @@ func (s *MovementService) getAvailableStock(userID int) (int, error) {
 /*
 save calculates the new available, validates it,  and saves the new stock movement
 */
-func (s *MovementService) save(rMovement interfaces.IMovementRepository, newMovement *dto.NewMovement, user *entity.User) (*entity.Movement, error) {
-	lastAvailable, err := s.getAvailableStock(user.UserID)
+func (s *MovementService) save(rMovement interfaces.IMovementRepository, newMovement *dto.NewMovement, customer *entity.Customer) (*entity.Movement, error) {
+	lastAvailable, err := s.getAvailableStock(customer.Customerid)
 	if err != nil {
 		return nil, err
 	}
@@ -52,17 +52,17 @@ func (s *MovementService) save(rMovement interfaces.IMovementRepository, newMove
 	}
 
 	movementToCreate := &entity.Movement{
-		UserID:    user.UserID,
-		Quantity:  newMovement.Quantity,
-		Available: newAvailable,
-		Type:      newMovement.Type,
+		Customerid: customer.Customerid,
+		Quantity:   newMovement.Quantity,
+		Available:  newAvailable,
+		Type:       newMovement.Type,
 	}
 
 	return rMovement.Create(movementToCreate)
 }
 
 /*
-Create takes a newMovementDTO, validates it, locks and validate the user and product, and then create the stock movement.
+Create takes a newMovementDTO, validates it, locks and validate the customer and product, and then create the stock movement.
 */
 func (s *MovementService) Create(newMovement *dto.NewMovement) (*entity.Movement, error) {
 	err := newMovement.Validate()
@@ -70,19 +70,19 @@ func (s *MovementService) Create(newMovement *dto.NewMovement) (*entity.Movement
 		return nil, err
 	}
 
-	rUser := s.rUser.Clone().(interfaces.IUserRepository)
+	rCustomer := s.rCustomer.Clone().(interfaces.ICustomerRepository)
 	rMovement := s.rMovement.Clone().(interfaces.IMovementRepository)
 
 	tx := rMovement.Begin(nil)
-	rUser.Begin(tx)
+	rCustomer.Begin(tx)
 	defer rMovement.Rollback()
 
-	user, err := rUser.FindAndLockByUserID(newMovement.UserID)
+	customer, err := rCustomer.FindAndLockByCustomerid(newMovement.Customerid)
 	if err != nil {
 		return nil, err
 	}
 
-	createdMovement, err := s.save(rMovement, newMovement, user)
+	createdMovement, err := s.save(rMovement, newMovement, customer)
 	if err != nil {
 		return nil, err
 	}

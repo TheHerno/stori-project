@@ -8,10 +8,10 @@ import (
 func init() {
 	up := func(db orm.DB) error {
 		_, err := db.Exec(`
-		CREATE TABLE user (
-			UserID serial PRIMARY KEY,
-			Name varchar(100) NOT NULL,
-			Email varchar(100) NOT NULL,
+		CREATE TABLE customer (
+			customer_id serial PRIMARY KEY,
+			name varchar(100) NOT NULL,
+			email varchar(100) NOT NULL
 		)
 		`)
 		return err
@@ -19,12 +19,12 @@ func init() {
 
 	down := func(db orm.DB) error {
 		_, err := db.Exec(`
-		DROP TABLE user
+		DROP TABLE customer
 		`)
 		return err
 	}
 
 	opts := migrations.MigrationOptions{}
 
-	migrations.Register("20220626201353_create_user_table", up, down, opts)
+	migrations.Register("20220626201353_create_customer_table", up, down, opts)
 }

@@ -7,11 +7,11 @@ import (
 	"gorm.io/gorm"
 )
 
-//StocksByUserID scope function to get stocks by user id
-func StocksByUserID(userID int, pagination *dto.Pagination) func(db *gorm.DB) *gorm.DB {
+//StocksByCustomerid scope function to get stocks by user id
+func StocksByCustomerid(customerid int, pagination *dto.Pagination) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		return db.Model(&entity.Movement{}).
-			Where(&entity.Movement{UserID: userID}).
+			Where(&entity.Movement{Customerid: customerid}).
 			Where("product.enabled = true AND product.deleted_at IS NULL").
 			Select("DISTINCT ON (movement.product_id) product.product_id, movement.available as stock, product.name, product.slug, product.description").
 			Joins("JOIN product ON product.product_id = movement.product_id").
@@ -21,11 +21,11 @@ func StocksByUserID(userID int, pagination *dto.Pagination) func(db *gorm.DB) *g
 	}
 }
 
-//MovementByUserID scope function to get stock movement user id
-func MovementByUserID(userID int) func(db *gorm.DB) *gorm.DB {
+//MovementByCustomerid scope function to get stock movement user id
+func MovementByCustomerid(customerid int) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		return db.
 			Model(&entity.Movement{}).
-			Where(&entity.Movement{UserID: userID})
+			Where(&entity.Movement{Customerid: customerid})
 	}
 }
