@@ -20,7 +20,7 @@ and registers them on one slice to be closed later
 func SetupCommonDependencies() {
 	logger.SetupLogger()
 	sentry.SetupSentry()
-	database.SetupTrainingGormDB()
+	database.SetupStoriGormDB()
 	dependenciesToClose = []io.Closer{}
 }
 

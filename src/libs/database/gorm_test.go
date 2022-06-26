@@ -10,15 +10,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func resetOnceTraining() {
+func resetOnceStori() {
 	once = sync.Once{}
 }
 
-func TestSetupTrainingGormDB(t *testing.T) {
+func TestSetupStoriGormDB(t *testing.T) {
 	t.Run("Should success on", func(t *testing.T) {
 		t.Run("Should success on", func(t *testing.T) {
-			resetOnceTraining()
-			db := SetupTrainingGormDB()
+			resetOnceStori()
+			db := SetupStoriGormDB()
 			sqlDB, _ := db.DB()
 			errPing := sqlDB.Ping()
 			//Data Assertion
@@ -37,8 +37,8 @@ func TestSetupTrainingGormDB(t *testing.T) {
 			var errPing error
 			wait := make(chan bool)
 			go func() {
-				resetOnceTraining()
-				db = SetupTrainingGormDB()
+				resetOnceStori()
+				db = SetupStoriGormDB()
 				sqlDB, _ := db.DB()
 				errPing = sqlDB.Ping()
 				wait <- true
@@ -58,11 +58,11 @@ func TestSetupTrainingGormDB(t *testing.T) {
 	})
 }
 
-func TestGetTrainingGormConnection(t *testing.T) {
+func TestGetStoriGormConnection(t *testing.T) {
 	t.Run("Should success when the connection is already open", func(t *testing.T) {
-		resetOnceTraining()
-		db := SetupTrainingGormDB()
-		dbSingleton := GetTrainingGormConnection()
+		resetOnceStori()
+		db := SetupStoriGormDB()
+		dbSingleton := GetStoriGormConnection()
 		sqlDB, _ := dbSingleton.DB()
 		errPing := sqlDB.Ping()
 		//Data Assertion

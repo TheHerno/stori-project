@@ -1,9 +1,9 @@
 {
-    "WAREHOUSE": {
-        "CREATED": "Warehouse created",
-        "FOUND": "Warehouse found",
-        "UPDATED": "Warehouse updated",
-        "DELETED": "Warehouse deleted"
+    "USER": {
+        "CREATED": "User created",
+        "FOUND": "User found",
+        "UPDATED": "User updated",
+        "DELETED": "User deleted"
     },
     "PRODUCT": {
         "CREATED": "Product created",
@@ -11,7 +11,7 @@
         "UPDATED": "Product updated",
         "DELETED": "Product deleted"
     },
-    "STOCKMOVEMENT": {
+    "MOVEMENT": {
         "CREATED": "Stock movement created"
     },
     "ERRORS": {
@@ -25,8 +25,8 @@
         "FIELD_VALIDATION": "The {{.Field}} field does not satisfy the validation {{.Validation}} {{.Valid}}",
         "USER_ID_DUPLICATED": "User ID already exists",
         "PRODUCT_NOT_ENABLED": "That product is not enabled",
-        "STOCK_MOVEMENT_INVALID": "Stock movement is invalid",
-        "CANT_DELETE_WAREHOUSE": "Cannot delete a warehouse with existent movements",
+        "MOVEMENT_INVALID": "Stock movement is invalid",
+        "CANT_DELETE_USER": "Cannot delete a user with existent movements",
         "CANT_DELETE_PRODUCT": "Cannot delete product with existent movements",
         "CONNECTION_PROVIDER": "Service not available, retry in a few minutes"
     }

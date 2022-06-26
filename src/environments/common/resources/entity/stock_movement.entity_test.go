@@ -1,35 +1,29 @@
 package entity
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestStockMovement(t *testing.T) {
+func TestMovement(t *testing.T) {
 	// fixture
-	validStockMovementID := 1
-	validProductID := 1
-	validWarehouseID := 1
+	validMovementID := 1
+	validUserID := 1
 	validQty := 10
 	validAvailable := 20
-	validConcept := "Venta"
 	validType := 1
-	longString := strings.Repeat("a", 101)
 	t.Run("Should success on", func(t *testing.T) {
 		// fixture
-		stockMovement := &StockMovement{
-			StockMovementID: validStockMovementID,
-			ProductID:       validProductID,
-			WarehouseID:     validWarehouseID,
-			Quantity:        validQty,
-			Available:       validAvailable,
-			Concept:         validConcept,
-			Type:            validType,
+		movement := &Movement{
+			MovementID: validMovementID,
+			UserID:     validUserID,
+			Quantity:   validQty,
+			Available:  validAvailable,
+			Type:       validType,
 		}
 		// action
-		err := stockMovement.Validate()
+		err := movement.Validate()
 		// assertion
 		assert.NoError(t, err)
 	})
@@ -37,145 +31,83 @@ func TestStockMovement(t *testing.T) {
 	t.Run("Should fail on", func(t *testing.T) {
 		testCases := []struct {
 			name  string
-			input *StockMovement
+			input *Movement
 		}{
 			{
-				name: "Without ProductID",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					WarehouseID:     validWarehouseID,
-					Quantity:        validQty,
-					Available:       validAvailable,
-					Concept:         validConcept,
-					Type:            validType,
+				name: "Without UserID",
+				input: &Movement{
+					MovementID: validMovementID,
+					Quantity:   validQty,
+					Available:  validAvailable,
+					Type:       validType,
 				},
 			},
 			{
-				name: "Invalid ProductID",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       0,
-					WarehouseID:     validWarehouseID,
-					Quantity:        validQty,
-					Available:       validAvailable,
-					Concept:         validConcept,
-					Type:            validType,
-				},
-			},
-			{
-				name: "Without WarehouseID",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					Quantity:        validQty,
-					Available:       validAvailable,
-					Concept:         validConcept,
-					Type:            validType,
-				},
-			},
-			{
-				name: "Invalid WarehouseID",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     0,
-					Quantity:        validQty,
-					Available:       validAvailable,
-					Concept:         validConcept,
-					Type:            validType,
+				name: "Invalid UserID",
+				input: &Movement{
+					MovementID: validMovementID,
+					UserID:     0,
+					Quantity:   validQty,
+					Available:  validAvailable,
+					Type:       validType,
 				},
 			},
 			{
 				name: "Without Quantity",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     validWarehouseID,
-					Available:       validAvailable,
-					Concept:         validConcept,
-					Type:            validType,
+				input: &Movement{
+					MovementID: validMovementID,
+					UserID:     validUserID,
+					Available:  validAvailable,
+					Type:       validType,
 				},
 			},
 			{
 				name: "Invalid Quantity",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     validWarehouseID,
-					Quantity:        0,
-					Available:       validAvailable,
-					Concept:         validConcept,
-					Type:            validType,
+				input: &Movement{
+					MovementID: validMovementID,
+					UserID:     validUserID,
+					Quantity:   0,
+					Available:  validAvailable,
+					Type:       validType,
 				},
 			},
 			{
 				name: "Without Available",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     validWarehouseID,
-					Quantity:        validQty,
-					Concept:         validConcept,
-					Type:            validType,
+				input: &Movement{
+					MovementID: validMovementID,
+					UserID:     validUserID,
+					Quantity:   validQty,
+					Type:       validType,
 				},
 			},
 
 			{
 				name: "Invalid Available",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     validWarehouseID,
-					Quantity:        validQty,
-					Available:       -1,
-					Concept:         validConcept,
-					Type:            validType,
-				},
-			},
-			{
-				name: "Without Concept",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     validWarehouseID,
-					Quantity:        validQty,
-					Available:       validAvailable,
-					Type:            validType,
-				},
-			},
-			{
-				name: "Invalid Concept",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     validWarehouseID,
-					Quantity:        validQty,
-					Available:       validAvailable,
-					Concept:         longString,
-					Type:            validType,
+				input: &Movement{
+					MovementID: validMovementID,
+					UserID:     validUserID,
+					Quantity:   validQty,
+					Available:  -1,
+					Type:       validType,
 				},
 			},
 			{
 				name: "Without Type",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     validWarehouseID,
-					Quantity:        validQty,
-					Available:       validAvailable,
-					Concept:         validConcept,
+				input: &Movement{
+					MovementID: validMovementID,
+					UserID:     validUserID,
+					Quantity:   validQty,
+					Available:  validAvailable,
 				},
 			},
 			{
 				name: "Invalid Type",
-				input: &StockMovement{
-					StockMovementID: validStockMovementID,
-					ProductID:       validProductID,
-					WarehouseID:     validWarehouseID,
-					Quantity:        validQty,
-					Available:       validAvailable,
-					Concept:         validConcept,
-					Type:            0,
+				input: &Movement{
+					MovementID: validMovementID,
+					UserID:     validUserID,
+					Quantity:   validQty,
+					Available:  validAvailable,
+					Type:       0,
 				},
 			},
 		}

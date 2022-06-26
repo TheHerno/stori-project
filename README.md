@@ -1,6 +1,6 @@
 # stori-service
 
-Training project with docker, postgres, migrations, sentry and ping endpoint
+Stori project with docker, postgres, migrations, sentry and ping endpoint
 
 ## Development containers
 

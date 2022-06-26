@@ -1,13 +1,9 @@
 package router
 
 import (
-	"stori-service/src/environments/client/modules/product"
-	"stori-service/src/environments/client/modules/stock"
-	"stori-service/src/environments/client/modules/warehouse"
-	commonProduct "stori-service/src/environments/common/modules/product"
-	commonWarehouse "stori-service/src/environments/common/modules/warehouse"
+	movement "stori-service/src/environments/client/modules/movement"
+	"stori-service/src/environments/client/modules/user"
 	"stori-service/src/libs/database"
-	"stori-service/src/libs/middleware"
 
 	"github.com/gorilla/mux"
 )
@@ -16,33 +12,17 @@ import (
 SetupClientRoutes creates all instances for client enviroment and calls each router
 */
 func SetupClientRoutes(subRouter *mux.Router) {
-	subRouter.Use(middleware.NewAuthMiddleware().HandlerClient())
-	stockMovementRoutes(subRouter.PathPrefix("/stock_movement").Subrouter())
-	productRoutes(subRouter.PathPrefix("/product").Subrouter())
+	movementRoutes(subRouter.PathPrefix("/movement").Subrouter())
 }
 
 /*
-productRoutes creates the router for product module
+movementRoutes creates the router for movement module
 */
-func productRoutes(subRouter *mux.Router) {
-	connection := database.GetTrainingGormConnection()
-	rStockMovement := stock.NewStockMovementGormRepo(connection)
-	rWarehouse := warehouse.NewWarehouseGormRepo(connection)
-	sProduct := product.NewProductService(rWarehouse, rStockMovement)
-	cProduct := product.NewProductController(sProduct)
-	product.NewProductRouter(subRouter, cProduct)
-}
-
-/*
-stockMovementRoutes creates the router for stock module
-*/
-func stockMovementRoutes(subRouter *mux.Router) {
-	connection := database.GetTrainingGormConnection()
-	rStockMovement := stock.NewStockMovementGormRepo(connection)
-	rWarehouse := warehouse.NewWarehouseGormRepo(connection)
-	rCWarehouse := commonWarehouse.NewWarehouseGormRepo(connection)
-	rProduct := commonProduct.NewProductGormRepo(connection)
-	sStockMovement := stock.NewStockMovementService(rStockMovement, rWarehouse, rCWarehouse, rProduct)
-	cStockMovement := stock.NewStockMovementController(sStockMovement)
-	stock.NewStockMovementRouter(subRouter, cStockMovement)
+func movementRoutes(subRouter *mux.Router) {
+	connection := database.GetStoriGormConnection()
+	rMovement := movement.NewMovementGormRepo(connection)
+	rUser := user.NewUserGormRepo(connection)
+	sMovement := movement.NewMovementService(rMovement, rUser)
+	cMovement := movement.NewMovementController(sMovement)
+	movement.NewMovementRouter(subRouter, cMovement)
 }

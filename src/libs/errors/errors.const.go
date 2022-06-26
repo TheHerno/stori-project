@@ -21,14 +21,14 @@ var (
 	//ErrProductNotEnabled indicate the Product is not enabled
 	ErrProductNotEnabled = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.PRODUCT_NOT_ENABLED"})
 
-	//ErrStockMovementInvalid indicates the Stock Movement is invalid
-	ErrStockMovementInvalid = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.STOCK_MOVEMENT_INVALID"})
+	//ErrMovementInvalid indicates the Stock Movement is invalid
+	ErrMovementInvalid = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.MOVEMENT_INVALID"})
 
 	//ErrCantDeleteProduct indicates the product can't be deleted
 	ErrCantDeleteProduct = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.CANT_DELETE_PRODUCT"})
 
-	//ErrCantDeleteWarehouse indicates the warehouse can't be deleted
-	ErrCantDeleteWarehouse = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.CANT_DELETE_WAREHOUSE"})
+	//ErrCantDeleteUser indicates the user can't be deleted
+	ErrCantDeleteUser = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.CANT_DELETE_USER"})
 
 	//ErrConnectionProvider indicates comunication error with provider
 	ErrConnectionProvider = NewMyError(http.StatusServiceUnavailable, i18n.Message{MessageID: "ERRORS.CONNECTION_PROVIDER"})

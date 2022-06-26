@@ -14,14 +14,14 @@ import (
 //Setup and teardown
 func TestMain(m *testing.M) {
 	//setup
-	SetupTrainingGormDB()
+	SetupStoriGormDB()
 	code := m.Run() //run tests
 	os.Exit(code)
 }
 func TestSetConnectionMaxLifetime(t *testing.T) {
 	t.Run("Should success on", func(t *testing.T) {
 		t.Run("Without duration, so it's never closed", func(t *testing.T) {
-			gormDB := GetTrainingGormConnection()
+			gormDB := GetStoriGormConnection()
 
 			//Action
 			setConnectionMaxLifetime(gormDB, 0)
@@ -31,7 +31,7 @@ func TestSetConnectionMaxLifetime(t *testing.T) {
 			assert.Equal(t, int64(0), sqlDB.Stats().MaxLifetimeClosed)
 		})
 		t.Run("A very small time, so it's closed after that time", func(t *testing.T) {
-			gormDB := GetTrainingGormConnection()
+			gormDB := GetStoriGormConnection()
 
 			//Action
 			setConnectionMaxLifetime(gormDB, time.Millisecond)

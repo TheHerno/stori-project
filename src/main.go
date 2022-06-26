@@ -2,7 +2,6 @@ package src
 
 import (
 	"net/http"
-	adminRouter "stori-service/src/environments/admin/resources/router"
 	clientRouter "stori-service/src/environments/client/resources/router"
 	"stori-service/src/libs/env"
 	myErrors "stori-service/src/libs/errors"
@@ -50,7 +49,6 @@ func SetupHandler() *http.Handler {
 settingRoutes takes a pointer to Router and call all environment routers passing its prefix
 */
 func settingRoutes(muxRouter *mux.Router) {
-	adminRouter.SetupAdminRoutes(muxRouter.PathPrefix("/v1/admin").Subrouter())
 	clientRouter.SetupClientRoutes(muxRouter.PathPrefix("/v1/client").Subrouter())
 	pingEndpoint(muxRouter)
 }

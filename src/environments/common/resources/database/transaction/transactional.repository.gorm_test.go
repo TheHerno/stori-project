@@ -10,7 +10,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	database.SetupTrainingGormDB()
+	database.SetupStoriGormDB()
 	code := m.Run()
 	os.Exit(code)
 }
@@ -20,7 +20,7 @@ func TestTransactionalGORMRepository(t *testing.T) {
 		t.Run("Should success on", func(t *testing.T) {
 			t.Run("With connection", func(t *testing.T) {
 				// Fixture
-				connection := database.GetTrainingGormConnection()
+				connection := database.GetStoriGormConnection()
 				basetx := connection.Begin()
 				baseRepository := TransactionalGORMRepository{basetx, 0}
 
@@ -37,7 +37,7 @@ func TestTransactionalGORMRepository(t *testing.T) {
 			})
 			t.Run("Without connection", func(t *testing.T) {
 				// Fixture
-				connection := database.GetTrainingGormConnection()
+				connection := database.GetStoriGormConnection()
 				baseRepository := TransactionalGORMRepository{connection, 0}
 
 				// Action
@@ -52,7 +52,7 @@ func TestTransactionalGORMRepository(t *testing.T) {
 			})
 			t.Run("Create table", func(t *testing.T) {
 				// Fixture
-				connection := database.GetTrainingGormConnection()
+				connection := database.GetStoriGormConnection()
 				baseRepository := TransactionalGORMRepository{connection, 0}
 
 				// Action
@@ -78,7 +78,7 @@ func TestTransactionalGORMRepository(t *testing.T) {
 		t.Run("Should success on", func(t *testing.T) {
 			t.Run("Create table", func(t *testing.T) {
 				// Fixture
-				connection := database.GetTrainingGormConnection()
+				connection := database.GetStoriGormConnection()
 				baseRepository := TransactionalGORMRepository{connection, 0}
 				tx := baseRepository.Begin(nil).(*gorm.DB)
 				tx.Exec(`DROP TABLE IF EXISTS "test";
@@ -101,7 +101,7 @@ func TestTransactionalGORMRepository(t *testing.T) {
 		t.Run("Should fail on", func(t *testing.T) {
 			t.Run("Commit two times", func(t *testing.T) {
 				// Fixture
-				connection := database.GetTrainingGormConnection()
+				connection := database.GetStoriGormConnection()
 				baseRepository := TransactionalGORMRepository{connection, 0}
 				baseRepository.Begin(nil)
 				err1 := baseRepository.Commit()
@@ -119,7 +119,7 @@ func TestTransactionalGORMRepository(t *testing.T) {
 		t.Run("Should pass", func(t *testing.T) {
 			t.Run("Create table", func(t *testing.T) {
 				// Fixture
-				connection := database.GetTrainingGormConnection()
+				connection := database.GetStoriGormConnection()
 				baseRepository := TransactionalGORMRepository{connection, 0}
 
 				// Action
@@ -145,7 +145,7 @@ func TestTransactionalGORMRepository(t *testing.T) {
 		t.Run("Should fail", func(t *testing.T) {
 			t.Run("Rollback two times", func(t *testing.T) {
 				// Fixture
-				connection := database.GetTrainingGormConnection()
+				connection := database.GetStoriGormConnection()
 				baseRepository := TransactionalGORMRepository{connection, 0}
 				baseRepository.Begin(nil)
 				err1 := baseRepository.Rollback()
@@ -179,7 +179,7 @@ func TestTransactionalGORMRepository(t *testing.T) {
 			t.Run("With rollback", func(t *testing.T) {
 				// Fixture
 				var countBeforeSavePoint, countAfterSavePoint, countAfterRollback int64
-				connection := database.GetTrainingGormConnection()
+				connection := database.GetStoriGormConnection()
 				baseRepository := TransactionalGORMRepository{connection, 0}
 
 				// Action

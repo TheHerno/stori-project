@@ -1,9 +1,9 @@
 {
-    "WAREHOUSE": {
-        "CREATED": "Warehouse creada",
-        "FOUND": "Warehouse encontrada",
-        "UPDATED": "Warehouse actualizada",
-        "DELETED": "Warehouse eliminada"
+    "USER": {
+        "CREATED": "User creada",
+        "FOUND": "User encontrada",
+        "UPDATED": "User actualizada",
+        "DELETED": "User eliminada"
     },
     "PRODUCT": {
         "CREATED": "Producto creado",
@@ -11,7 +11,7 @@
         "UPDATED": "Producto actualizado",
         "DELETED": "Producto eliminado"
     },
-    "STOCKMOVEMENT": {
+    "MOVEMENT": {
         "CREATED": "Movimiento de stock creado"
     },
     "ERRORS": {
@@ -25,8 +25,8 @@
         "FIELD_VALIDATION": "El campo {{.Field}} no satisface la validación {{.Validation}} {{.Valid}}",
         "USER_ID_DUPLICATED": "El ID del usuario ya existe",
         "PRODUCT_NOT_ENABLED": "Ese producto no está habilitado",
-        "STOCK_MOVEMENT_INVALID": "Movimiento de stock no válido",
-        "CANT_DELETE_WAREHOUSE": "No puede borrar una warehouse con movimientos existentes",
+        "MOVEMENT_INVALID": "Movimiento de stock no válido",
+        "CANT_DELETE_USER": "No puede borrar una user con movimientos existentes",
         "CANT_DELETE_PRODUCT": "No puede borrar un producto con movimientos existentes",
         "CONNECTION_PROVIDER": "Servicio no disponible, reintente en unos minutos"
     }

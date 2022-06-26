@@ -18,8 +18,8 @@ var (
 	once sync.Once
 )
 
-//CreateTrainingConnectionString returns the connection string based on environment variables
-func CreateTrainingConnectionString() string {
+//CreateStoriConnectionString returns the connection string based on environment variables
+func CreateStoriConnectionString() string {
 	//db config vars
 	dbHost := env.StoriServicePostgresqlHost
 	dbPort := env.StoriServicePostgresqlPort
@@ -36,9 +36,9 @@ func CreateTrainingConnectionString() string {
 }
 
 /*
-SetupTrainingGormDB open the pool connection in db var and return it
+SetupStoriGormDB open the pool connection in db var and return it
 */
-func SetupTrainingGormDB() *gorm.DB {
+func SetupStoriGormDB() *gorm.DB {
 	once.Do(func() {
 		config := &gorm.Config{
 			Logger: ormlogger.Default.LogMode(ormlogger.Info),
@@ -48,12 +48,12 @@ func SetupTrainingGormDB() *gorm.DB {
 		}
 		//connect to db
 		var dbError error
-		db, dbError = gorm.Open(postgres.Open(CreateTrainingConnectionString()), config)
+		db, dbError = gorm.Open(postgres.Open(CreateStoriConnectionString()), config)
 		for dbError != nil {
 			logger.GetInstance().Error("Failed to connect to own-database")
 			time.Sleep(env.StoriServiceSecondsBetweenAttempts)
 			logger.GetInstance().Info("Retrying...")
-			db, dbError = gorm.Open(postgres.Open(CreateTrainingConnectionString()), config)
+			db, dbError = gorm.Open(postgres.Open(CreateStoriConnectionString()), config)
 		}
 		logger.GetInstance().Info("Connected to own-database!")
 		setConnectionMaxLifetime(db, 0) //To be reused forever
@@ -62,8 +62,8 @@ func SetupTrainingGormDB() *gorm.DB {
 }
 
 /*
-GetTrainingGormConnection return db pointer which already have an open connection
+GetStoriGormConnection return db pointer which already have an open connection
 */
-func GetTrainingGormConnection() *gorm.DB {
-	return SetupTrainingGormDB()
+func GetStoriGormConnection() *gorm.DB {
+	return SetupStoriGormDB()
 }
