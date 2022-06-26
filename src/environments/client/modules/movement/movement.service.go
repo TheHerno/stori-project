@@ -1,4 +1,4 @@
-package stock
+package movement
 
 import (
 	goerrors "errors"

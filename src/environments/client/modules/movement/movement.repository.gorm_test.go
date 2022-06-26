@@ -1,4 +1,4 @@
-package stock
+package movement
 
 import (
 	"stori-service/src/environments/common/resources/entity"
