@@ -14,12 +14,12 @@ func TestMovementController(t *testing.T) {
 			Quantity:  movement.Quantity,
 			Type:      movement.Type,
 		}
-		movementToCreateWithCustomerid := &dto.NewMovement{}
-		copier.Copy(movementToCreateWithCustomerid, movementToCreate)
-		movementToCreateWithCustomerid.Customerid = 1
+		movementToCreateWithCustomerID := &dto.NewMovement{}
+		copier.Copy(movementToCreateWithCustomerID, movementToCreate)
+		movementToCreateWithCustomerID.CustomerID = 1
 		expectedMovement := &entity.Movement{
 			MovementID: movement.MovementID,
-			Customerid:     movement.Customerid,
+			CustomerID:     movement.CustomerID,
 			Quantity:   movement.Quantity,
 			Available:  movement.Available,
 			Type:       movement.Type,
@@ -29,7 +29,7 @@ func TestMovementController(t *testing.T) {
 			cMovement := NewMovementController(mockClientMovementService)
 
 			// expectations
-			mockClientMovementService.On("Create", movementToCreateWithCustomerid).Return(movement, nil)
+			mockClientMovementService.On("Create", movementToCreateWithCustomerID).Return(movement, nil)
 
 			// action
 			resp := mock.MHTTPHandle(http.MethodPost, "/", cMovement.Create, "", urlvalues, movementToCreate)
@@ -76,7 +76,7 @@ func TestMovementController(t *testing.T) {
 				cMovement := NewMovementController(mockClientMovementService)
 
 				// expectations
-				mockClientMovementService.On("Create", movementToCreateWithCustomerid).Return(nil, serviceErr)
+				mockClientMovementService.On("Create", movementToCreateWithCustomerID).Return(nil, serviceErr)
 
 				// action
 				resp := mock.MHTTPHandle(http.MethodPost, "/", func(res http.ResponseWriter, req *http.Request) {

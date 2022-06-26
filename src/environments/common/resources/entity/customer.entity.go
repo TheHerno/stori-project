@@ -11,7 +11,7 @@ import (
 	Customer model for Customer table
 */
 type Customer struct {
-	Customerid int            `json:"customer_id" gorm:"primaryKey" groups:"client"`
+	CustomerID int            `json:"customer_id" gorm:"primaryKey" groups:"client"`
 	Name       string         `json:"name" validate:"required,min=3,max=100" groups:"client"`
 	Email      string         `json:"email" validate:"required,email,max=100" groups:"client"`
 	CreatedAt  time.Time      `json:"created_at" groups:""`

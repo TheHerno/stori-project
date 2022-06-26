@@ -11,7 +11,10 @@ func init() {
 		CREATE TABLE customer (
 			customer_id serial PRIMARY KEY,
 			name varchar(100) NOT NULL,
-			email varchar(100) NOT NULL
+			email varchar(100) NOT NULL,
+			created_at timestamp with time zone NOT NULL DEFAULT NOW(),
+			updated_at timestamp with time zone NOT NULL DEFAULT NOW(),
+			deleted_at timestamp with time zone
 		)
 		`)
 		return err

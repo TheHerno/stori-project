@@ -15,7 +15,7 @@ func TestCustomer(t *testing.T) {
 	longString := strings.Repeat("E", 301)
 	t.Run("Should success on", func(t *testing.T) {
 		w := Customer{
-			Customerid: 1,
+			CustomerID: 1,
 			Name:       validName,
 			Email:      validEmail,
 		}
@@ -26,25 +26,25 @@ func TestCustomer(t *testing.T) {
 	t.Run("Should fail on", func(t *testing.T) {
 		testCases := map[string]*Customer{
 			"Without name": {
-				Customerid: validId,
+				CustomerID: validId,
 				Email:      validEmail,
 			},
 			"Short name": {
-				Customerid: validId,
+				CustomerID: validId,
 				Name:       shortString,
 				Email:      validEmail,
 			},
 			"Long name": {
-				Customerid: validId,
+				CustomerID: validId,
 				Name:       longString,
 				Email:      validEmail,
 			},
 			"Without email": {
-				Customerid: validId,
+				CustomerID: validId,
 				Name:       validName,
 			},
 			"Invalid email": {
-				Customerid: validId,
+				CustomerID: validId,
 				Name:       validName,
 				Email:      "invalid email",
 			},

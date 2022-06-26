@@ -27,22 +27,29 @@ type result struct {
 	Date     time.Time
 }
 
+var trueValue = true
+var falseValue = false
+
 var customers = []entity.Customer{
 	{
-		Customerid: 1,
-		Name:       "Customer 1",
+		CustomerID: 1,
+		Name:       "User 1",
+		Email:      "test1@hotmail.com",
 	},
 	{
-		Customerid: 2,
-		Name:       "Customer 2",
+		CustomerID: 2,
+		Name:       "User 2",
+		Email:      "test2@hotmail.com",
 	},
 	{
-		Customerid: 3,
-		Name:       "Customer 3",
+		CustomerID: 3,
+		Name:       "User 3",
+		Email:      "test3@hotmail.com",
 	},
 	{
-		Customerid: 4,
-		Name:       "Customer 4",
+		CustomerID: 4,
+		Name:       "User 4",
+		Email:      "test4@hotmail.com",
 	},
 }
 
@@ -54,115 +61,80 @@ func addFixtures(tx *gorm.DB) {
 	tx.Create(customers)
 }
 
-func TestGormRepository(t *testing.T) {
-	t.Run("FindByCustomerid", func(t *testing.T) {
-		//Fixture
-		customerid := customers[0].Customerid
+func TestCustomerRepository(t *testing.T) {
+	t.Run("FindAndLockByCustomerID", func(t *testing.T) {
 		t.Run("Should success on", func(t *testing.T) {
-			tx := database.GetStoriGormConnection().Begin()
-			addFixtures(tx)
-			rCustomer := NewCustomerGormRepo(tx)
-
-			got, err := rCustomer.FindByCustomerid(customerid)
-
-			//Data Assertion
-			assert.NoError(t, err)
-			assert.True(t, cmp.Equal(got, &customers[0], cmpopts.IgnoreFields(entity.Customer{}, "UpdatedAt", "CreatedAt")))
-
-			t.Cleanup(func() {
-				tx.Rollback()
-			})
-		})
-
-		t.Run("Should fail on", func(t *testing.T) {
-			t.Run("Customer not found", func(t *testing.T) {
-				//Fixture
-				customerid := 9999999
-				tx := database.GetStoriGormConnection().Begin()
-				addFixtures(tx)
-
-				rCustomer := NewCustomerGormRepo(tx)
-
-				got, err := rCustomer.FindByCustomerid(customerid)
-
-				//Data Assertion
-				assert.EqualError(t, err, errors.ErrNotFound.Error())
-				assert.Nil(t, got)
-
-				t.Cleanup(func() {
-					tx.Rollback()
-				})
-			})
-			t.Run("Table doesn't exist", func(t *testing.T) {
+			t.Run("Finding a customer", func(t *testing.T) {
+				customerIDToFind := customers[1].CustomerID
 				connection := database.GetStoriGormConnection()
+				addFixtures(connection)
 				tx := connection.Begin()
 				rCustomer := NewCustomerGormRepo(tx)
-				tx.Unscoped().Where("1=1").Delete(&entity.Customer{}) //Cleaning customers
-				tx.Migrator().DropTable(&entity.Customer{})
 
-				got, err := rCustomer.FindByCustomerid(customerid)
+				got, err := rCustomer.FindByCustomerID(customerIDToFind)
 
-				//Data Assertion
-				assert.Nil(t, got)
-				assert.Error(t, err)
-
+				assert.NoError(t, err)
+				assert.True(t, cmp.Equal(got, &customers[1], cmpopts.IgnoreTypes(time.Time{})))
 				t.Cleanup(func() {
 					tx.Rollback()
+					connection.Unscoped().Where("1=1").Delete(&entity.Customer{})
 				})
 			})
 		})
 	})
-	t.Run("FindAndLockByID", func(t *testing.T) {
+	t.Run("FindAndLockByCustomerID", func(t *testing.T) {
 		t.Run("Should success on", func(t *testing.T) {
-			// fixture
-			customeridToFind := customers[1].Customerid
-			channelResult1 := make(chan result)
-			channelResult2 := make(chan result)
+			t.Run("Finding and locking a customer", func(t *testing.T) {
+				// fixture
+				customerIDToFind := customers[1].CustomerID
+				channelResult1 := make(chan result)
+				channelResult2 := make(chan result)
 
-			connection := database.GetStoriGormConnection()
-			addFixtures(connection)
-			tx := connection.Begin()
-			rCustomer := NewCustomerGormRepo(tx)
+				connection := database.GetStoriGormConnection()
+				addFixtures(connection)
+				tx := connection.Begin()
+				rCustomer := NewCustomerGormRepo(tx)
 
-			go func() {
-				got, err := rCustomer.FindAndLockByCustomerid(customeridToFind)
-				channelResult1 <- result{got, err, time.Now()}
-				time.Sleep(500 * time.Millisecond)
-				tx.Commit()
-			}()
+				go func() {
+					got, err := rCustomer.FindAndLockByCustomerID(customerIDToFind)
+					channelResult1 <- result{got, err, time.Now()}
+					time.Sleep(500 * time.Millisecond)
+					tx.Commit()
+				}()
 
-			go func() {
-				err2 := connection.Table("customer").Where("customer_id = ?", customeridToFind).
-					Update("name", "Customeritooo").Error
-				channelResult2 <- result{nil, err2, time.Now()}
-			}()
+				go func() {
+					err2 := connection.Table("customer").Where("customer_id = ?", customerIDToFind).
+						Update("email", "testtest@hotmail.com").Error
+					channelResult2 <- result{nil, err2, time.Now()}
+				}()
 
-			// assertions
-			result1 := <-channelResult1
-			assert.NoError(t, result1.Err)
-			assert.True(t, cmp.Equal(result1.Customer, &customers[1], cmpopts.IgnoreTypes(time.Time{})))
-			// tries to update but still nil because the lock is not released
-			result2 := <-channelResult2
-			assert.Nil(t, result2.Customer)
-			assert.NoError(t, result2.Err)
-			assert.True(t, result2.Date.After(result1.Date))
+				// assertions
+				result1 := <-channelResult1
+				assert.NoError(t, result1.Err)
+				assert.True(t, cmp.Equal(result1.Customer, &customers[1], cmpopts.IgnoreTypes(time.Time{})))
+				// tries to update but still nil because the lock is not released
+				result2 := <-channelResult2
+				assert.Nil(t, result2.Customer)
+				assert.NoError(t, result2.Err)
+				assert.True(t, result2.Date.After(result1.Date))
 
-			t.Cleanup(func() {
-				tx.Rollback()
-				connection.Unscoped().Where("1=1").Delete(&entity.Customer{})
+				t.Cleanup(func() {
+					tx.Rollback()
+					connection.Unscoped().Where("1=1").Delete(&entity.Customer{})
+				})
 			})
 		})
 		t.Run("Should fail on", func(t *testing.T) {
 			t.Run("Customer doesn't exists", func(t *testing.T) {
 				// fixture
-				customeridToFind := 78
+				customerIDToFind := 78
 				connection := database.GetStoriGormConnection()
 				addFixtures(connection)
 				tx := connection.Begin()
 				rCustomer := NewCustomerGormRepo(tx)
 
 				// action
-				got, err := rCustomer.FindAndLockByCustomerid(customeridToFind)
+				got, err := rCustomer.FindAndLockByCustomerID(customerIDToFind)
 
 				// assertions
 				assert.Nil(t, got)
@@ -181,7 +153,7 @@ func TestGormRepository(t *testing.T) {
 				tx.Unscoped().Where("1=1").Delete(&entity.Customer{}) //Cleaning customers
 				tx.Migrator().DropTable(&entity.Customer{})
 
-				got, err := rCustomer.FindAndLockByCustomerid(1)
+				got, err := rCustomer.FindAndLockByCustomerID(1)
 
 				//Data Assertion
 				assert.Nil(t, got)
@@ -192,14 +164,14 @@ func TestGormRepository(t *testing.T) {
 				})
 			})
 		})
-	})
-	t.Run("Clone", func(t *testing.T) {
-		db := database.GetStoriGormConnection()
-		rCustomer := NewCustomerGormRepo(db)
+		t.Run("Clone", func(t *testing.T) {
+			db := database.GetStoriGormConnection()
+			rCustomer := NewCustomerGormRepo(db)
 
-		clone := rCustomer.Clone()
+			clone := rCustomer.Clone()
 
-		assert.NotNil(t, clone)
-		assert.Equal(t, rCustomer, clone)
+			assert.NotNil(t, clone)
+			assert.Equal(t, rCustomer, clone)
+		})
 	})
 }

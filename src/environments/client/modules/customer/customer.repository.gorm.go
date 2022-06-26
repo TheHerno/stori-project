@@ -29,38 +29,36 @@ func NewCustomerGormRepo(gormDb *gorm.DB) interfaces.ICustomerRepository {
 }
 
 /*
-findByCustomeridAndMayLock finds a customer by its Customerid and locks it if lock is true
+FindAndLockByCustomerID it's a partial application of findAndMayLockByCustomerID with lock argument set to true
 */
-func (r *customerGormRepo) findByCustomeridAndMayLock(customerid int, lock bool) (*entity.Customer, error) {
+func (r *customerGormRepo) FindAndLockByCustomerID(customerId int) (*entity.Customer, error) {
+	return r.findAndMayLockByCustomerID(customerId, true)
+}
+
+/*
+FindByCustomerID it's a partial application of findAndMayLockByCustomerID with lock argument set to true
+*/
+func (r *customerGormRepo) FindByCustomerID(customerId int) (*entity.Customer, error) {
+	return r.findAndMayLockByCustomerID(customerId, false)
+}
+
+/*
+findAndMayLockByCustomerID returns a customer by its id and locks it if the second argument is true
+*/
+func (r *customerGormRepo) findAndMayLockByCustomerID(customerId int, lock bool) (*entity.Customer, error) {
+	var customer entity.Customer
 	db := r.DB
 	if lock {
 		db = db.Clauses(clause.Locking{Strength: "UPDATE"})
 	}
-	var customer entity.Customer
-	err := db.
-		Where("customer_id", customerid).
-		Take(&customer).Error
+	err := db.Where("customer_id = ?", customerId).First(&customer).Error
 	if goerrors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, errors.ErrNotFound
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &customer, err
-}
-
-/*
-FindAndLockByCustomerid finds and locks a customer by its ID
-*/
-func (r *customerGormRepo) FindAndLockByCustomerid(customerid int) (*entity.Customer, error) {
-	return r.findByCustomeridAndMayLock(customerid, true)
-}
-
-/*
-FindByCustomerid finds a customer by its ID
-*/
-func (r *customerGormRepo) FindByCustomerid(customerid int) (*entity.Customer, error) {
-	return r.findByCustomeridAndMayLock(customerid, false)
+	return &customer, nil
 }
 
 /*

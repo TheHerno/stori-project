@@ -3,7 +3,6 @@ package interfaces
 import (
 	"stori-service/src/environments/common/resources/entity"
 	commonInterfaces "stori-service/src/environments/common/resources/interfaces"
-	"stori-service/src/libs/dto"
 )
 
 /*
@@ -11,15 +10,15 @@ IMovementRepository to interact with entity and database
 */
 type IMovementRepository interface {
 	commonInterfaces.ITransactionalRepository
-	Create(movement *entity.Movement) (*entity.Movement, error)
-	FindLastMovement(customerid int) (*entity.Movement, error)
+	BulkCreate(movements []entity.Movement) error
+	FindLastMovementByCustomerID(customerid int) (*entity.Movement, error)
 }
 
 /*
 	IMovementService methods with bussiness logic
 */
 type IMovementService interface {
-	Create(movement *dto.NewMovement) (*entity.Movement, error)
+	BulkSave(movements []entity.Movement) error
 }
 
 /*

@@ -8,13 +8,13 @@ import (
 
 func TestNewMovementDTO(t *testing.T) {
 	// fixture
-	validCustomerid := 1
+	validCustomerID := 1
 	validQty := 10
 	validType := 1
 	t.Run("Should success on", func(t *testing.T) {
 		// fixture
 		dto := &NewMovement{
-			Customerid: validCustomerid,
+			CustomerID: validCustomerID,
 			Quantity:   validQty,
 			Type:       validType,
 		}
@@ -29,16 +29,16 @@ func TestNewMovementDTO(t *testing.T) {
 			input *NewMovement
 		}{
 			{
-				name: "Without Customerid",
+				name: "Without CustomerID",
 				input: &NewMovement{
 					Quantity: validQty,
 					Type:     validType,
 				},
 			},
 			{
-				name: "Invalid Customerid",
+				name: "Invalid CustomerID",
 				input: &NewMovement{
-					Customerid: 0,
+					CustomerID: 0,
 					Quantity:   validQty,
 					Type:       validType,
 				},
@@ -46,14 +46,14 @@ func TestNewMovementDTO(t *testing.T) {
 			{
 				name: "Without Quantity",
 				input: &NewMovement{
-					Customerid: validCustomerid,
+					CustomerID: validCustomerID,
 					Type:       validType,
 				},
 			},
 			{
 				name: "Invalid Quantity",
 				input: &NewMovement{
-					Customerid: validCustomerid,
+					CustomerID: validCustomerID,
 					Quantity:   0,
 					Type:       validType,
 				},
@@ -61,14 +61,14 @@ func TestNewMovementDTO(t *testing.T) {
 			{
 				name: "Without Type",
 				input: &NewMovement{
-					Customerid: validCustomerid,
+					CustomerID: validCustomerID,
 					Quantity:   validQty,
 				},
 			},
 			{
 				name: "Invalid Type",
 				input: &NewMovement{
-					Customerid: validCustomerid,
+					CustomerID: validCustomerID,
 					Quantity:   validQty,
 					Type:       0,
 				},

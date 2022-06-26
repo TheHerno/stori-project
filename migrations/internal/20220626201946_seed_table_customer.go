@@ -8,7 +8,7 @@ import (
 func init() {
 	up := func(db orm.DB) error {
 		/*
-			I seed the user table here because user managment is not on the code challenge.
+			I seed the customer table here because user managment is not on the code challenge.
 		*/
 		_, err := db.Exec(`
 			INSERT INTO customer (customer_id, name, email) VALUES

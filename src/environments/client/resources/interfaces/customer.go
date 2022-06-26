@@ -10,6 +10,6 @@ import (
 */
 type ICustomerRepository interface {
 	interfaces.ITransactionalRepository
-	FindAndLockByCustomerid(id int) (*entity.Customer, error)
-	FindByCustomerid(id int) (*entity.Customer, error)
+	FindAndLockByCustomerID(id int) (*entity.Customer, error)
+	FindByCustomerID(id int) (*entity.Customer, error)
 }

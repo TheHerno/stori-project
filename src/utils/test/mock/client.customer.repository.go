@@ -10,9 +10,9 @@ type ClientCustomerRepository struct {
 }
 
 /*
-FindAndLockByCustomerid mock method
+FindAndLockByCustomerID mock method
 */
-func (mock *ClientCustomerRepository) FindAndLockByCustomerid(customerid int) (*entity.Customer, error) {
+func (mock *ClientCustomerRepository) FindAndLockByCustomerID(customerid int) (*entity.Customer, error) {
 	args := mock.Called(customerid)
 	result := args.Get(0)
 	if result != nil {
@@ -22,9 +22,9 @@ func (mock *ClientCustomerRepository) FindAndLockByCustomerid(customerid int) (*
 }
 
 /*
-FindByCustomerid mock method
+FindByCustomerID mock method
 */
-func (mock *ClientCustomerRepository) FindByCustomerid(customerid int) (*entity.Customer, error) {
+func (mock *ClientCustomerRepository) FindByCustomerID(customerid int) (*entity.Customer, error) {
 	args := mock.Called(customerid)
 	result := args.Get(0)
 	if result != nil {

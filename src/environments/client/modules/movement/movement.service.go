@@ -41,7 +41,7 @@ func (s *MovementService) getAvailableStock(customerid int) (int, error) {
 save calculates the new available, validates it,  and saves the new stock movement
 */
 func (s *MovementService) save(rMovement interfaces.IMovementRepository, newMovement *dto.NewMovement, customer *entity.Customer) (*entity.Movement, error) {
-	lastAvailable, err := s.getAvailableStock(customer.Customerid)
+	lastAvailable, err := s.getAvailableStock(customer.CustomerID)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (s *MovementService) save(rMovement interfaces.IMovementRepository, newMove
 	}
 
 	movementToCreate := &entity.Movement{
-		Customerid: customer.Customerid,
+		CustomerID: customer.CustomerID,
 		Quantity:   newMovement.Quantity,
 		Available:  newAvailable,
 		Type:       newMovement.Type,
@@ -77,7 +77,7 @@ func (s *MovementService) Create(newMovement *dto.NewMovement) (*entity.Movement
 	rCustomer.Begin(tx)
 	defer rMovement.Rollback()
 
-	customer, err := rCustomer.FindAndLockByCustomerid(newMovement.Customerid)
+	customer, err := rCustomer.FindAndLockByCustomerID(newMovement.CustomerID)
 	if err != nil {
 		return nil, err
 	}

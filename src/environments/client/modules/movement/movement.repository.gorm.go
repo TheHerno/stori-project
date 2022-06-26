@@ -42,11 +42,18 @@ func (r *movementGormRepo) Create(movement *entity.Movement) (*entity.Movement, 
 }
 
 /*
-FindLastMovement finds the last stock movement of a product and a user
+BulkCreate receives a list of movements to be created and creates them
 */
-func (r *movementGormRepo) FindLastMovement(customerid int) (*entity.Movement, error) {
+func (r *movementGormRepo) BulkCreate(movements []entity.Movement) error {
+	return r.DB.Create(&movements).Error
+}
+
+/*
+FindLastMovementByCustomerID finds the last stock movement of a user
+*/
+func (r *movementGormRepo) FindLastMovementByCustomerID(customerid int) (*entity.Movement, error) {
 	var movement entity.Movement
-	err := r.DB.Scopes(scopes.MovementByCustomerid(customerid)).
+	err := r.DB.Scopes(scopes.MovementByCustomerID(customerid)).
 		Order("movement_id DESC").
 		Take(&movement).Error
 
@@ -59,33 +66,6 @@ func (r *movementGormRepo) FindLastMovement(customerid int) (*entity.Movement, e
 	}
 
 	return &movement, nil
-}
-
-/*
-getStockCountByUser returns the stock count of a product in a user
-*/
-func (r *movementGormRepo) getStockCountByUser(customerid int) (int64, error) {
-	var count int64
-	// No encontramos como hacer que gorm nos deje hacer esto con subquery.
-	err := r.DB.Raw(`SELECT COUNT(*) FROM (
-		SELECT DISTINCT ON
-		(movement.product_id) product.product_id,
-		movement.available as stock,
-		product.name,
-		product.slug,
-		product.description FROM "movement"
-		JOIN product
-		ON product.product_id = movement.product_id
-		WHERE movement.customer_id = ?
-		AND (product.enabled = true AND product.deleted_at IS NULL)
-		AND "movement"."deleted_at" IS NULL
-		ORDER BY movement.product_id ASC,
-		movement_id DESC
-		) AS count`, customerid).Scan(&count).Error
-	if err != nil {
-		return int64(0), err
-	}
-	return count, nil
 }
 
 /*

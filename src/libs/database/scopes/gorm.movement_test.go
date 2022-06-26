@@ -20,8 +20,8 @@ func TestMain(m *testing.M) {
 
 func TestMovementScope(t *testing.T) {
 	db := database.GetStoriGormConnection().Session(&gorm.Session{DryRun: true})
-	t.Run("MovementByCustomerid", func(t *testing.T) {
-		subQuery := db.Scopes(MovementByCustomerid(1)).Find(nil).Statement
+	t.Run("MovementByCustomerID", func(t *testing.T) {
+		subQuery := db.Scopes(MovementByCustomerID(1)).Find(nil).Statement
 
 		//Data Assertion: query
 		assert.Contains(t, subQuery.SQL.String(), `SELECT * FROM "movement"`)
@@ -30,9 +30,9 @@ func TestMovementScope(t *testing.T) {
 		//Data Assertion: inteporlated values
 		assert.Equal(t, 1, subQuery.Vars[0])
 	})
-	t.Run("StocksByCustomerid", func(t *testing.T) {
+	t.Run("StocksByCustomerID", func(t *testing.T) {
 		pagination := dto.NewPagination(2, 20, 0)
-		subQuery := db.Scopes(StocksByCustomerid(1, pagination)).Find(nil).Statement
+		subQuery := db.Scopes(StocksByCustomerID(1, pagination)).Find(nil).Statement
 
 		//Data Assertion: query
 		assert.Contains(t, subQuery.SQL.String(), `SELECT DISTINCT ON (movement.product_id)`)
