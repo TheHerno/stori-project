@@ -8,17 +8,15 @@ import (
 
 func TestNewMovementDTO(t *testing.T) {
 	// fixture
-	validProductID := 1
 	validUserID := 1
 	validQty := 10
 	validType := 1
 	t.Run("Should success on", func(t *testing.T) {
 		// fixture
 		dto := &NewMovement{
-			ProductID: validProductID,
-			UserID:    validUserID,
-			Quantity:  validQty,
-			Type:      validType,
+			UserID:   validUserID,
+			Quantity: validQty,
+			Type:     validType,
 		}
 		// action
 		err := dto.Validate()
@@ -31,71 +29,48 @@ func TestNewMovementDTO(t *testing.T) {
 			input *NewMovement
 		}{
 			{
-				name: "Without ProductID",
+				name: "Without UserID",
 				input: &NewMovement{
-					UserID:   validUserID,
 					Quantity: validQty,
 					Type:     validType,
 				},
 			},
 			{
-				name: "Invalid ProductID",
-				input: &NewMovement{
-					ProductID: 0,
-					UserID:    validUserID,
-					Quantity:  validQty,
-					Type:      validType,
-				},
-			},
-			{
-				name: "Without UserID",
-				input: &NewMovement{
-					ProductID: validProductID,
-					Quantity:  validQty,
-					Type:      validType,
-				},
-			},
-			{
 				name: "Invalid UserID",
 				input: &NewMovement{
-					ProductID: validProductID,
-					UserID:    0,
-					Quantity:  validQty,
-					Type:      validType,
+					UserID:   0,
+					Quantity: validQty,
+					Type:     validType,
 				},
 			},
 			{
 				name: "Without Quantity",
 				input: &NewMovement{
-					ProductID: validProductID,
-					UserID:    validUserID,
-					Type:      validType,
+					UserID: validUserID,
+					Type:   validType,
 				},
 			},
 			{
 				name: "Invalid Quantity",
 				input: &NewMovement{
-					ProductID: validProductID,
-					UserID:    validUserID,
-					Quantity:  0,
-					Type:      validType,
+					UserID:   validUserID,
+					Quantity: 0,
+					Type:     validType,
 				},
 			},
 			{
 				name: "Without Type",
 				input: &NewMovement{
-					ProductID: validProductID,
-					UserID:    validUserID,
-					Quantity:  validQty,
+					UserID:   validUserID,
+					Quantity: validQty,
 				},
 			},
 			{
 				name: "Invalid Type",
 				input: &NewMovement{
-					ProductID: validProductID,
-					UserID:    validUserID,
-					Quantity:  validQty,
-					Type:      0,
+					UserID:   validUserID,
+					Quantity: validQty,
+					Type:     0,
 				},
 			},
 		}
