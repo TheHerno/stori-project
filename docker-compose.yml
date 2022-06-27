@@ -14,6 +14,7 @@ services:
             EVENT_LOGGER_PASSWORD: ${EVENT_LOGGER_PASSWORD}
             EVENT_LOGGER_URL: ${EVENT_LOGGER_URL}
             EVENT_LOGGER_USER: ${EVENT_LOGGER_USER}
+            FILE_ROUTE: ${FILE_ROUTE}
             STORI_SERVICE_POSTGRESQL_HOST: stori-service-postgres
             STORI_SERVICE_POSTGRESQL_NAME: db
             STORI_SERVICE_POSTGRESQL_NAME_TEST: postgres

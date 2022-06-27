@@ -3,6 +3,7 @@ package movement
 import (
 	"bufio"
 	goerrors "errors"
+	"fmt"
 	"math"
 	"os"
 	"stori-service/src/environments/client/resources/interfaces"
@@ -54,6 +55,7 @@ func (s *movementService) ProcessFile(customerID int) (*dto.MovementList, error)
 	path := getPath(customerID)
 	file, err := os.Open(path)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	defer file.Close()
@@ -91,6 +93,9 @@ func (s *movementService) ProcessFile(customerID int) (*dto.MovementList, error)
 	}
 	err = rMovement.BulkCreate(movementList.Movements)
 	if err != nil {
+		if e := err.Error(); strings.Contains(e, "23505") {
+			err = errors.ErrDuplicatedID
+		}
 		return nil, err
 	}
 	err = rMovement.Commit()

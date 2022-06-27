@@ -29,6 +29,9 @@ var (
 
 	//ErrInvalidFileLine indicates a line in the file is invalid
 	ErrInvalidFileLine = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.INVALID_FILE_LINE"})
+
+	//ErrDuplicatedID indicates a that one of the movements id is already on the database
+	ErrDuplicatedID = NewMyError(http.StatusBadRequest, i18n.Message{MessageID: "ERRORS.DUPLICATED_ID"})
 )
 
 //Private errors

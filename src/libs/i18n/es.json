@@ -12,6 +12,7 @@
         "FIELD_VALIDATION": "El campo {{.Field}} no satisface la validación {{.Validation}} {{.Valid}}",
         "MOVEMENT_INVALID": "Movimiento no válido",
         "CONNECTION_PROVIDER": "Servicio no disponible, reintente en unos minutos",
-        "INVALID_FILE_LINE": "Linea del archivo inválida"
+        "INVALID_FILE_LINE": "Linea del archivo inválida",
+        "DUPLICATED_ID": "ID de movimiento duplicado. Quizás ya procesaste ese archivo?"
     }
 }
