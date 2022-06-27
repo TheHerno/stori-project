@@ -9,10 +9,10 @@ func init() {
 	up := func(db orm.DB) error {
 		_, err := db.Exec(`
 		CREATE TABLE movement (
-			movement_id serial PRIMARY KEY,
+			movement_id int PRIMARY KEY,
 			customer_id int NOT NULL,
-			quantity int NOT NULL,
-			available int NOT NULL,
+			quantity float  NOT NULL,
+			available float NOT NULL,
 			type int NOT NULL,
 			date timestamp with time zone NOT NULL,
 			created_at timestamp with time zone NOT NULL DEFAULT NOW(),
@@ -25,7 +25,7 @@ func init() {
 
 	down := func(db orm.DB) error {
 		_, err := db.Exec(`
-		DROP TABLE customer
+		DROP TABLE movement
 		`)
 		return err
 	}

@@ -66,6 +66,18 @@ var (
 
 	// FileRoute Params service URL
 	FileRoute string
+
+	// EmailServer Email smtp server
+	EmailServer string
+
+	// EmailPort Email port
+	EmailPort int
+
+	// EmailAccount Email account
+	EmailAccount string
+
+	// EmailPassword Email password
+	EmailPassword string
 )
 
 func init() {
@@ -109,6 +121,12 @@ func init() {
 
 	// Params service
 	FileRoute = os.Getenv("FILE_ROUTE")
+
+	// Email settings
+	EmailServer = os.Getenv("EMAIL_SERVER")
+	EmailPort, _ = strconv.Atoi(os.Getenv("EMAIL_PORT"))
+	EmailAccount = os.Getenv("EMAIL_ACCOUNT")
+	EmailPassword = os.Getenv("EMAIL_PASSWORD")
 }
 
 // processIntEnvVar gets environment variable from os and parses it to int
