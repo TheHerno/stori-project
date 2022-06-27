@@ -1,27 +1,81 @@
 package email
 
 import (
-	"stori-service/src/libs/dto"
-	"stori-service/src/libs/env"
+	"stori-service/src/environments/common/resources/entity"
+	"stori-service/src/utils/constant"
+	"testing"
+	"time"
 
-	"github.com/go-gomail/gomail"
+	"github.com/stretchr/testify/assert"
 )
 
-var (
-	emailServer   = env.EmailServer
-	emailAcount   = env.EmailAccount
-	emailPort     = env.EmailPort
-	emailPassword = env.EmailPassword
-)
+func TestGetTransactionByMonth(t *testing.T) {
+	t.Run("Should success on", func(t *testing.T) {
+		t.Run("Getting list by month", func(t *testing.T) {
+			// fixture
+			movements := []entity.Movement{
+				{
+					Date: time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC),
+				},
+				{
+					Date: time.Date(2020, time.March, 2, 0, 0, 0, 0, time.UTC),
+				},
+			}
+			// action
+			list := getTransactionByMonth(movements)
 
-func SendEmail(movementList *dto.MovementList) error {
-	m := gomail.NewMessage()
-	m.SetHeader("From", emailAcount)
-	m.SetHeader("To", movementList.Customer.Email)
-	m.SetHeader("Subject", "Balance")
-	m.SetBody("text/html", "Hello <b>Bob</b> and <i>Cora</i>!")
+			// assert
+			assert.Equal(t, "Number of transactions in January: 1<br>Number of transactions in March: 1<br>", list)
+		})
+	})
+}
 
-	d := gomail.NewDialer(emailServer, emailPort, emailAcount, emailPassword)
+func TestGetAvgCredit(t *testing.T) {
+	t.Run("Should success on", func(t *testing.T) {
+		t.Run("Getting average credit", func(t *testing.T) {
+			// fixture
+			movements := []entity.Movement{
+				{
+					Date:     time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC),
+					Type:     constant.IncomeType,
+					Quantity: 100.00,
+				},
+				{
+					Date:     time.Date(2020, time.March, 2, 0, 0, 0, 0, time.UTC),
+					Type:     constant.IncomeType,
+					Quantity: 200.00,
+				},
+			}
+			// action
+			avgCredit := getAvgCredit(movements)
 
-	return d.DialAndSend(m)
+			// assert
+			assert.Equal(t, float64(150), avgCredit)
+		})
+	})
+}
+
+func TestGetAvgDebit(t *testing.T) {
+	t.Run("Should success on", func(t *testing.T) {
+		t.Run("Getting average debit", func(t *testing.T) {
+			// fixture
+			movements := []entity.Movement{
+				{
+					Date:     time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC),
+					Type:     constant.OutcomeType,
+					Quantity: 100.00,
+				},
+				{
+					Date:     time.Date(2020, time.March, 2, 0, 0, 0, 0, time.UTC),
+					Type:     constant.OutcomeType,
+					Quantity: 200.00,
+				},
+			}
+			// action
+			avgDebit := getAvgDebit(movements)
+
+			// assert
+			assert.Equal(t, float64(150), avgDebit)
+		})
+	})
 }

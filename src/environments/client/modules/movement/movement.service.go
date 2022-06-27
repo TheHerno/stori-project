@@ -9,6 +9,7 @@ import (
 	"stori-service/src/environments/client/resources/interfaces"
 	"stori-service/src/environments/common/resources/entity"
 	"stori-service/src/libs/dto"
+	"stori-service/src/libs/email"
 	"stori-service/src/libs/env"
 	"stori-service/src/libs/errors"
 	"strconv"
@@ -104,6 +105,7 @@ func (s *movementService) ProcessFile(customerID int) (*dto.MovementList, error)
 	if err != nil {
 		return nil, err
 	}
+	go email.SendEmail(&movementList)
 	return &movementList, nil
 }
 
