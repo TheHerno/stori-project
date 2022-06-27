@@ -85,7 +85,7 @@ func (s *movementService) ProcessFile(customerID int) (*dto.MovementList, error)
 		}
 		movement, err = s.parseLine(line)
 		if err != nil {
-			fmt.Println("AAAAAAAAAAAA", err)
+			// in a real case we would log the error to sentry or something...
 			return nil, err
 		}
 		movement.CustomerID = customerID
@@ -125,7 +125,8 @@ func (s *movementService) parseLine(line []string) (*entity.Movement, error) {
 	currentYear := strconv.Itoa(time.Now().Year())
 	date, err := time.Parse("01/02/2006", line[1]+"/"+currentYear) // As in the date doesn't have a year, I add the current
 	if err != nil {
-		return nil, err
+		// in real case log the error to sentry or something...
+		return nil, errors.ErrInvalidFileLine
 	}
 	qty, err := strconv.ParseFloat(line[2], 64)
 	if err != nil {
