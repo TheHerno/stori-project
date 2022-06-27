@@ -29,7 +29,7 @@ services:
             STORI_SERVICE_REST_PORT: 9009
             SECONDS_BETWEEN_ATTEMPTS: 10
             SERVICE_NAME: stori-service
-            WHITE_LIST: 'http://localhost:9000'
+            WHITE_LIST: 'http://localhost:9000,http://localhost:3000'
             PARAMS_URL: ${PARAMS_URL}
         ports:
             - '9009:9009'
