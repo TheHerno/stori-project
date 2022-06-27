@@ -94,6 +94,8 @@ $ docker-compose exec app go clean -testcache
 It processes the files from ./files/ directory with the given ID when a request is made to
 localhost:9009/v1/client/client-movements/:id
 
+Transactions in the file MUST be in cronological order. Also the ID can't be repeated, thus one file can only be processed once.
+
 Currently only works with id=1 and id=2 because there's no logic for creating new users and there are only these two.
 
 Image of the email received by the user:
