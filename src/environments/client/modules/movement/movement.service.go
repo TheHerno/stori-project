@@ -88,6 +88,8 @@ func (s *movementService) ProcessFile(customerID int) (*dto.MovementList, error)
 		}
 		movement.CustomerID = customerID
 		movement.Available = lastAvailable + (movement.Quantity * float64(movement.Type))
+		// round to 2 decimals
+		movement.Available = math.Round(movement.Available*100) / 100
 		// add movement to list
 		movementList.Movements = append(movementList.Movements, *movement)
 	}
