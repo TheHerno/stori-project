@@ -2,6 +2,7 @@ package entity
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -10,8 +11,9 @@ func TestMovement(t *testing.T) {
 	// fixture
 	validMovementID := 1
 	validCustomerID := 1
-	validQty := 10
-	validAvailable := 20
+	validQty := 10.0
+	validDate := time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC)
+	validAvailable := 20.00
 	validType := 1
 	t.Run("Should success on", func(t *testing.T) {
 		// fixture
@@ -21,6 +23,7 @@ func TestMovement(t *testing.T) {
 			Quantity:   validQty,
 			Available:  validAvailable,
 			Type:       validType,
+			Date:       validDate,
 		}
 		// action
 		err := movement.Validate()
@@ -40,6 +43,7 @@ func TestMovement(t *testing.T) {
 					Quantity:   validQty,
 					Available:  validAvailable,
 					Type:       validType,
+					Date:       validDate,
 				},
 			},
 			{
@@ -50,6 +54,7 @@ func TestMovement(t *testing.T) {
 					Quantity:   validQty,
 					Available:  validAvailable,
 					Type:       validType,
+					Date:       validDate,
 				},
 			},
 			{
@@ -59,6 +64,7 @@ func TestMovement(t *testing.T) {
 					CustomerID: validCustomerID,
 					Available:  validAvailable,
 					Type:       validType,
+					Date:       validDate,
 				},
 			},
 			{
@@ -69,6 +75,7 @@ func TestMovement(t *testing.T) {
 					Quantity:   0,
 					Available:  validAvailable,
 					Type:       validType,
+					Date:       validDate,
 				},
 			},
 			{
@@ -78,6 +85,7 @@ func TestMovement(t *testing.T) {
 					CustomerID: validCustomerID,
 					Quantity:   validQty,
 					Type:       validType,
+					Date:       validDate,
 				},
 			},
 
@@ -89,6 +97,7 @@ func TestMovement(t *testing.T) {
 					Quantity:   validQty,
 					Available:  -1,
 					Type:       validType,
+					Date:       validDate,
 				},
 			},
 			{
@@ -98,10 +107,22 @@ func TestMovement(t *testing.T) {
 					CustomerID: validCustomerID,
 					Quantity:   validQty,
 					Available:  validAvailable,
+					Date:       validDate,
 				},
 			},
 			{
 				name: "Invalid Type",
+				input: &Movement{
+					MovementID: validMovementID,
+					CustomerID: validCustomerID,
+					Quantity:   validQty,
+					Available:  validAvailable,
+					Type:       0,
+					Date:       validDate,
+				},
+			},
+			{
+				name: "Without date",
 				input: &Movement{
 					MovementID: validMovementID,
 					CustomerID: validCustomerID,

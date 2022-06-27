@@ -27,9 +27,6 @@ type result struct {
 	Date     time.Time
 }
 
-var trueValue = true
-var falseValue = false
-
 var customers = []entity.Customer{
 	{
 		CustomerID: 1,

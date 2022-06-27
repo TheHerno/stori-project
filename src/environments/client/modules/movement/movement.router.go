@@ -1,7 +1,9 @@
 package movement
 
 import (
+	"net/http"
 	"stori-service/src/environments/client/resources/interfaces"
+	"stori-service/src/utils/helpers"
 
 	"github.com/gorilla/mux"
 )
@@ -23,10 +25,10 @@ func NewMovementRouter(subRouter *mux.Router, cMovement interfaces.IMovementCont
 routes assigns controller function for routes
 */
 func (r *movementRouter) routes(subRouter *mux.Router) {
-	/*subRouter.
-	Path(``).
-	Handler(helpers.Middleware(
-		http.HandlerFunc(r.cMovement.Create),
-	)).
-	Methods(http.MethodPost)*/
+	subRouter.
+		Path(`/{id}`).
+		Handler(helpers.Middleware(
+			http.HandlerFunc(r.cMovement.ProcessFile),
+		)).
+		Methods(http.MethodGet)
 }

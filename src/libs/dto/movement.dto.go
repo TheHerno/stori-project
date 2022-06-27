@@ -1,22 +1,13 @@
 package dto
 
-import "stori-service/src/libs/validator"
+import (
+	"stori-service/src/environments/common/resources/entity"
+)
 
 /*
-NewMovement is a DTO to create a Stock Movement
+MovementList is a DTO to list all Movements of a customer
 */
-type NewMovement struct {
-	CustomerID int `json:"customer_id" validate:"required,gt=0"`
-	Quantity   int `json:"quantity" validate:"required,gt=0"`
-	Type       int `json:"type" validate:"required,eq=1|eq=-1"`
-}
-
-/*
-Validate returns an error if entity doesn't pass any of its own validations
-*/
-func (newMovement *NewMovement) Validate() error {
-	if err := validator.ValidateStruct(newMovement); err != nil {
-		return err
-	}
-	return nil
+type MovementList struct {
+	Customer  *entity.Customer  `json:"customer"`
+	Movements []entity.Movement `json:"movements"`
 }

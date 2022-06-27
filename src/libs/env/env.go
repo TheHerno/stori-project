@@ -64,8 +64,8 @@ var (
 	// EventLoggerPassword Logger service password
 	EventLoggerPassword string
 
-	// ParamsURL Params service URL
-	ParamsURL string
+	// FileRoute Params service URL
+	FileRoute string
 )
 
 func init() {
@@ -108,7 +108,7 @@ func init() {
 	WhiteList = os.Getenv("WHITE_LIST")
 
 	// Params service
-	ParamsURL = os.Getenv("PARAMS_URL")
+	FileRoute = os.Getenv("FILE_ROUTE")
 }
 
 // processIntEnvVar gets environment variable from os and parses it to int

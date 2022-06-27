@@ -1,18 +1,6 @@
 {
-    "CUSTOMER": {
-        "CREATED": "Customer created",
-        "FOUND": "Customer found",
-        "UPDATED": "Customer updated",
-        "DELETED": "Customer deleted"
-    },
-    "PRODUCT": {
-        "CREATED": "Product created",
-        "FOUND": "Product found",
-        "UPDATED": "Product updated",
-        "DELETED": "Product deleted"
-    },
-    "MOVEMENT": {
-        "CREATED": "Stock movement created"
+    "MOVEMENT_LIST": {
+        "CREATED": "Movement list created"
     },
     "ERRORS": {
         "NOT_FOUND": "Entity not found",
@@ -21,13 +9,9 @@
         "PAGE_SIZE_TOO_LARGE": "Page size value too large",
         "PAGE_TOO_LARGE": "Page value too large",
         "ID_NOT_NUMERIC": "ID field is not numeric",
-        "GET_CUSTOMER": "Cannot get customer data",
         "FIELD_VALIDATION": "The {{.Field}} field does not satisfy the validation {{.Validation}} {{.Valid}}",
-        "CUSTOMER_ID_DUPLICATED": "Customer ID already exists",
-        "PRODUCT_NOT_ENABLED": "That product is not enabled",
-        "MOVEMENT_INVALID": "Stock movement is invalid",
-        "CANT_DELETE_CUSTOMER": "Cannot delete a customer with existent movements",
-        "CANT_DELETE_PRODUCT": "Cannot delete product with existent movements",
-        "CONNECTION_PROVIDER": "Service not available, retry in a few minutes"
+        "MOVEMENT_INVALID": "Movement is invalid",
+        "CONNECTION_PROVIDER": "Service not available, retry in a few minutes",
+        "INVALID_FILE_LINE": "Invalid file line"
     }
 }

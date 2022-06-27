@@ -1,69 +1,78 @@
 package movement
 
 import (
+	goErrors "errors"
+	"net/http"
+	"net/url"
+	"stori-service/src/environments/common/resources/entity"
+	"stori-service/src/libs/dto"
+	"stori-service/src/libs/errors"
+	"stori-service/src/libs/i18n"
+	"stori-service/src/utils"
+	"stori-service/src/utils/constant"
+	"stori-service/src/utils/test/mock"
 	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMovementController(t *testing.T) {
-	// Fixture
-	/*serviceErr := goerrors.New("service error")
-	t.Run("Create", func(t *testing.T) {
-		movement := &movements[0]
-		urlvalues := url.Values{}
-		movementToCreate := &dto.NewMovement{
-			Quantity:  movement.Quantity,
-			Type:      movement.Type,
-		}
-		movementToCreateWithCustomerID := &dto.NewMovement{}
-		copier.Copy(movementToCreateWithCustomerID, movementToCreate)
-		movementToCreateWithCustomerID.CustomerID = 1
-		expectedMovement := &entity.Movement{
-			MovementID: movement.MovementID,
-			CustomerID:     movement.CustomerID,
-			Quantity:   movement.Quantity,
-			Available:  movement.Available,
-			Type:       movement.Type,
-		}
+	urlvalues := url.Values{}
+	serviceErr := goErrors.New("service error")
+	path := `/{id}`
+	expectedMovementList := &dto.MovementList{
+		Customer: &entity.Customer{
+			CustomerID: 1,
+			Name:       "pepe",
+			Email:      "pepepe@hotmail.com",
+		},
+		Movements: []entity.Movement{
+			{
+				MovementID: 1,
+				CustomerID: 1,
+				Available:  100.00,
+				Quantity:   100.00,
+				Type:       constant.IncomeType,
+				Date:       time.Now(),
+			},
+		},
+	}
+	t.Run("ProcessFile", func(t *testing.T) {
 		t.Run("Should success on", func(t *testing.T) {
-			mockClientMovementService := new(mock.ClientMovementService)
-			cMovement := NewMovementController(mockClientMovementService)
+			t.Run("Processing file", func(t *testing.T) {
+				// fixture
+				mockMovementService := new(mock.ClientMovementService)
+				movementControler := NewMovementController(mockMovementService)
 
-			// expectations
-			mockClientMovementService.On("Create", movementToCreateWithCustomerID).Return(movement, nil)
+				// mock expectations
+				mockMovementService.On("ProcessFile", 1).Return(expectedMovementList, nil)
 
-			// action
-			resp := mock.MHTTPHandle(http.MethodPost, "/", cMovement.Create, "", urlvalues, movementToCreate)
+				//Action
+				resp := mock.MHTTPHandle(http.MethodGet, path, movementControler.ProcessFile, "1", urlvalues, nil)
 
-			//Mock Assertion
-			mockClientMovementService.AssertExpectations(t)
-			mockClientMovementService.AssertNumberOfCalls(t, "Create", 1)
+				//Mock Assertion
+				mockMovementService.AssertExpectations(t)
+				mockMovementService.AssertNumberOfCalls(t, "ProcessFile", 1)
 
-			result := &entity.Movement{}
-			bodyResponse, _ := utils.GetBodyResponse(resp, &result)
+				result := &dto.MovementList{}
+				bodyResponse, _ := utils.GetBodyResponse(resp, result)
 
-			//Data Assertion
-			assert.Equal(t, 201, resp.StatusCode)
-			assert.Equal(t, i18n.T(i18n.Message{MessageID: "MOVEMENT.CREATED"}), bodyResponse.Message)
-			assert.Empty(t, bodyResponse.Errors)
-			assert.Equal(t, expectedMovement, result)
+				//Data Assertion
+				assert.Equal(t, http.StatusOK, resp.StatusCode)
+				assert.Equal(t, i18n.T(i18n.Message{MessageID: "MOVEMENT_LIST.CREATED"}), bodyResponse.Message)
+				assert.Empty(t, bodyResponse.Errors)
+			})
 		})
 		t.Run("Should fail on", func(t *testing.T) {
-			t.Run("Missing body", func(t *testing.T) {
-				mockClientMovementService := new(mock.ClientMovementService)
-				cMovement := NewMovementController(mockClientMovementService)
+			t.Run("Invalid id", func(t *testing.T) {
+				// fixture
+				movementControler := NewMovementController(nil)
 
-				// action
-				resp := mock.MHTTPHandle(http.MethodPost, "/", func(res http.ResponseWriter, req *http.Request) {
-					ctx := context.WithValue(req.Context(), middleware.ContextKeyUser, user)
+				//Action
+				resp := mock.MHTTPHandle(http.MethodGet, path, movementControler.ProcessFile, "asd", urlvalues, nil)
 
-					cMovement.Create(res, req.WithContext(ctx))
-				}, "", urlvalues, nil)
-
-				//Mock Assertion
-				mockClientMovementService.AssertExpectations(t)
-				mockClientMovementService.AssertNumberOfCalls(t, "Create", 0)
-
-				result := &entity.Movement{}
+				result := &dto.MovementList{}
 				bodyResponse, _ := utils.GetBodyResponse(resp, result)
 
 				//Data Assertion
@@ -71,25 +80,22 @@ func TestMovementController(t *testing.T) {
 				assert.Equal(t, errors.ErrInternalServer.Error(), bodyResponse.Errors[0]["error"])
 				assert.Empty(t, result)
 			})
-			t.Run("Service error", func(t *testing.T) {
-				mockClientMovementService := new(mock.ClientMovementService)
-				cMovement := NewMovementController(mockClientMovementService)
+			t.Run("Service fails processing file", func(t *testing.T) {
+				// fixture
+				mockMovementService := new(mock.ClientMovementService)
+				movementControler := NewMovementController(mockMovementService)
 
-				// expectations
-				mockClientMovementService.On("Create", movementToCreateWithCustomerID).Return(nil, serviceErr)
+				// mock expectations
+				mockMovementService.On("ProcessFile", 1).Return(nil, serviceErr)
 
-				// action
-				resp := mock.MHTTPHandle(http.MethodPost, "/", func(res http.ResponseWriter, req *http.Request) {
-					ctx := context.WithValue(req.Context(), middleware.ContextKeyUser, user)
-
-					cMovement.Create(res, req.WithContext(ctx))
-				}, "", urlvalues, movementToCreate)
+				//Action
+				resp := mock.MHTTPHandle(http.MethodGet, path, movementControler.ProcessFile, "1", urlvalues, nil)
 
 				//Mock Assertion
-				mockClientMovementService.AssertExpectations(t)
-				mockClientMovementService.AssertNumberOfCalls(t, "Create", 1)
+				mockMovementService.AssertExpectations(t)
+				mockMovementService.AssertNumberOfCalls(t, "ProcessFile", 1)
 
-				result := &entity.Movement{}
+				result := &dto.MovementList{}
 				bodyResponse, _ := utils.GetBodyResponse(resp, result)
 
 				//Data Assertion
@@ -98,5 +104,5 @@ func TestMovementController(t *testing.T) {
 				assert.Empty(t, result)
 			})
 		})
-	})*/
+	})
 }

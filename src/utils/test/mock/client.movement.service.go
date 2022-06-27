@@ -1,7 +1,6 @@
 package mock
 
 import (
-	"stori-service/src/environments/common/resources/entity"
 	"stori-service/src/libs/dto"
 
 	"github.com/stretchr/testify/mock"
@@ -11,14 +10,12 @@ type ClientMovementService struct {
 	mock.Mock
 }
 
-/*
-Create mock method
-*/
-func (mock *ClientMovementService) Create(newMovement *dto.NewMovement) (*entity.Movement, error) {
-	args := mock.Called(newMovement)
+// ProcessFile mock method
+func (c *ClientMovementService) ProcessFile(customerID int) (*dto.MovementList, error) {
+	args := c.Called(customerID)
 	result := args.Get(0)
 	if result != nil {
-		return result.(*entity.Movement), nil
+		return result.(*dto.MovementList), args.Error(1)
 	}
 	return nil, args.Error(1)
 }

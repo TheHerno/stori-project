@@ -21,9 +21,9 @@ func TestNewMovementRouter(t *testing.T) {
 				Handler string
 			}{
 				{
-					Path:    "",
-					Method:  http.MethodPost,
-					Handler: "Create",
+					Path:    "/{id}",
+					Method:  http.MethodGet,
+					Handler: "ProcessFile",
 				},
 			}
 

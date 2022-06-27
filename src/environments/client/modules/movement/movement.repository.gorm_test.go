@@ -6,6 +6,7 @@ import (
 	"stori-service/src/libs/database"
 	"stori-service/src/utils/constant"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -18,6 +19,12 @@ func TestMain(m *testing.M) {
 	database.SetupStoriGormDB()
 	code := m.Run()
 	os.Exit(code)
+}
+
+type result struct {
+	Movement *entity.Movement
+	Err      error
+	Date     time.Time
 }
 
 var customers = []entity.Customer{
@@ -112,12 +119,10 @@ func addForeignFixtures(tx *gorm.DB) {
 }
 
 /*
-	Fixtures: four movements
+addFixtures adds fixtures to the database
 */
-
 func addFixtures(tx *gorm.DB) {
-	addForeignFixtures(tx)
-	tx.Unscoped().Where("1=1").Delete(&entity.Movement{}) // cleaning movements
+	tx.Unscoped().Where("1=1").Delete(&entity.Movement{}) // cleaning users
 	tx.Create(movements)
 }
 
@@ -165,38 +170,82 @@ func TestGormRepository(t *testing.T) {
 			})
 		})
 	})
-	t.Run("FindLastMovement", func(t *testing.T) {
-		//Fixture
-		customerID := 1
+	t.Run("GetLastMovementByCustomerID", func(t *testing.T) {
 		t.Run("Should success on", func(t *testing.T) {
-			t.Run("Finding last movement", func(t *testing.T) {
-				tx := database.GetStoriGormConnection().Begin()
-				addFixtures(tx)
+			t.Run("Getting last movement", func(t *testing.T) {
+				// fixture
+				customerIDToFind := customers[0].CustomerID
+				channelResult1 := make(chan result)
+				channelResult2 := make(chan result)
+
+				connection := database.GetStoriGormConnection()
+				addFixtures(connection)
+				tx := connection.Begin()
 				rMovement := NewMovementGormRepo(tx)
 
-				got, err := rMovement.FindLastMovementByCustomerID(customerID)
+				go func() {
+					got, err := rMovement.GetLastMovementByCustomerID(customerIDToFind)
+					channelResult1 <- result{got, err, time.Now()}
+					time.Sleep(500 * time.Millisecond)
+					tx.Commit()
+				}()
 
-				//Data Assertion
-				assert.NoError(t, err)
-				assert.True(t, cmp.Equal(got, &movements[3], cmpopts.IgnoreFields(entity.Movement{}, "UpdatedAt", "CreatedAt")))
+				go func() {
+					err2 := connection.Table("movement").Where("customer_id = ?", customerIDToFind).
+						Update("customer_id", "5").Error
+					channelResult2 <- result{nil, err2, time.Now()}
+				}()
+
+				// assertions
+				result1 := <-channelResult1
+				assert.NoError(t, result1.Err)
+				assert.True(t, cmp.Equal(result1.Movement, &movements[0], cmpopts.IgnoreTypes(time.Time{})))
+				// tries to update but still nil because the lock is not released
+				result2 := <-channelResult2
+				assert.Nil(t, result2.Movement)
+				assert.NoError(t, result2.Err)
+				assert.True(t, result2.Date.After(result1.Date))
 
 				t.Cleanup(func() {
 					tx.Rollback()
+					connection.Unscoped().Where("1=1").Delete(&entity.Customer{})
 				})
 			})
 		})
 		t.Run("Should fail on", func(t *testing.T) {
-			t.Run("Table doesn't exists", func(t *testing.T) {
-				tx := database.GetStoriGormConnection().Begin()
+			t.Run("Customer doesn't exists", func(t *testing.T) {
+				// fixture
+				customerIDToFind := 78
+				connection := database.GetStoriGormConnection()
+				addFixtures(connection)
+				tx := connection.Begin()
 				rMovement := NewMovementGormRepo(tx)
-				tx.Unscoped().Where("1=1").Delete(&entity.Movement{}) // cleaning the table
+
+				// action
+				got, err := rMovement.GetLastMovementByCustomerID(customerIDToFind)
+
+				// assertions
+				assert.Nil(t, got)
+				assert.Error(t, err)
+
+				t.Cleanup(func() {
+					tx.Rollback()
+					connection.Unscoped().Where("1=1").Delete(&entity.Customer{})
+				})
+			})
+			t.Run("Table doesn't exist", func(t *testing.T) {
+				connection := database.GetStoriGormConnection()
+				tx := connection.Begin()
+				rMovement := NewMovementGormRepo(tx)
+				tx.Unscoped().Where("1=1").Delete(&entity.Movement{}) //Cleaning customers
 				tx.Migrator().DropTable(&entity.Movement{})
 
-				got, err := rMovement.FindLastMovementByCustomerID(customerID)
+				got, err := rMovement.GetLastMovementByCustomerID(1)
 
 				//Data Assertion
 				assert.Nil(t, got)
 				assert.Error(t, err)
+
 				t.Cleanup(func() {
 					tx.Rollback()
 				})

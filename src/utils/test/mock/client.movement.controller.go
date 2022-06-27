@@ -13,7 +13,7 @@ type ClientMovementController struct {
 	mock.Mock
 }
 
-// Create mock method
-func (mock *ClientMovementController) Create(response http.ResponseWriter, request *http.Request) {
+// ProcessFile mock method
+func (mock *ClientMovementController) ProcessFile(response http.ResponseWriter, request *http.Request) {
 	mock.Called(response, request)
 }

@@ -5,10 +5,10 @@ import (
 	"stori-service/src/environments/client/resources/interfaces"
 	database "stori-service/src/environments/common/resources/database/transaction"
 	"stori-service/src/environments/common/resources/entity"
-	"stori-service/src/libs/database/scopes"
 	"stori-service/src/libs/errors"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 /*
@@ -29,19 +29,6 @@ func NewMovementGormRepo(gormDb *gorm.DB) interfaces.IMovementRepository {
 }
 
 /*
-Create receives the movement to be created and creates it
-If there is an error, returns it as a second result
-*/
-func (r *movementGormRepo) Create(movement *entity.Movement) (*entity.Movement, error) {
-	err := r.DB.Create(movement).Error
-	if err != nil {
-		return nil, err
-	}
-
-	return movement, nil
-}
-
-/*
 BulkCreate receives a list of movements to be created and creates them
 */
 func (r *movementGormRepo) BulkCreate(movements []entity.Movement) error {
@@ -49,23 +36,22 @@ func (r *movementGormRepo) BulkCreate(movements []entity.Movement) error {
 }
 
 /*
-FindLastMovementByCustomerID finds the last stock movement of a user
+GetLastMovementByCustomerID receives a customerID, locks the table and returns the last movement
 */
-func (r *movementGormRepo) FindLastMovementByCustomerID(customerid int) (*entity.Movement, error) {
+func (r *movementGormRepo) GetLastMovementByCustomerID(customerID int) (*entity.Movement, error) {
 	var movement entity.Movement
-	err := r.DB.Scopes(scopes.MovementByCustomerID(customerid)).
-		Order("movement_id DESC").
+	db := r.DB.Clauses(clause.Locking{Strength: "UPDATE"})
+	err := db.Model(&entity.Movement{}).
+		Where(&entity.Movement{CustomerID: customerID}).
+		Order("date DESC").
 		Take(&movement).Error
-
 	if goerrors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, errors.ErrNotFound
 	}
-
 	if err != nil {
 		return nil, err
 	}
-
-	return &movement, nil
+	return &movement, err
 }
 
 /*

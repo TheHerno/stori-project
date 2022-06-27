@@ -12,7 +12,7 @@ import (
 SetupClientRoutes creates all instances for client enviroment and calls each router
 */
 func SetupClientRoutes(subRouter *mux.Router) {
-	movementRoutes(subRouter.PathPrefix("/movement").Subrouter())
+	movementRoutes(subRouter.PathPrefix("/client-movements").Subrouter())
 }
 
 /*
