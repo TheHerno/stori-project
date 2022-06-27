@@ -1,6 +1,6 @@
 # stori-service
 
-Stori project with docker, postgres, migrations, sentry and ping endpoint
+Stori project with docker, postgres, migrations and ping endpoint
 
 ## Development containers
 
@@ -44,12 +44,6 @@ Development
 $ docker-compose exec app go run migrations/internal/*.go migrate
 ```
 
-Production
-
-```bash
-$ migrations.internal migrate
-```
-
 -   Run all external migrations
 
 ```bash
@@ -60,12 +54,6 @@ Tests
 
 ```bash
 $ docker-compose exec -e APP_ENV=testing app go run migrations/internal/*.go migrate
-```
-
-Production
-
-```bash
-$ migrations.external migrate
 ```
 
 If you need to rollback, just change the final word `migrate` for `rollback` (roll back the previous run batch of migrations)
@@ -102,14 +90,7 @@ Clean cache (Useful for forcing tests to run again)
 $ docker-compose exec app go clean -testcache
 ```
 
-## Benchmark
-
-Add descriptions, results and bash code for each benchmark
-
-## Bash scripts
-
-Add description and bash code for each bash script
-
-## Api documentation
-
-Postman documentation is available here
+## How it works?
+It processes the files from ./files/ directory with the given ID when a request is made to
+localhost:9009/v1/client/client-movements/:id
+Currently only works with id=1 and id=2 because there's no logic for creating new users and there are only these two.
