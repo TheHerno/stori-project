@@ -93,7 +93,9 @@ $ docker-compose exec app go clean -testcache
 ## How it works?
 It processes the files from ./files/ directory with the given ID when a request is made to
 localhost:9009/v1/client/client-movements/:id
+
 Currently only works with id=1 and id=2 because there's no logic for creating new users and there are only these two.
 
 Image of the email received by the user:
+
 ![email](./imgs/email.jpg)
